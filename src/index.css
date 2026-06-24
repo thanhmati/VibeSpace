@@ -1,0 +1,424 @@
+/* VibeSpace Core Design System Styles */
+
+:root {
+  /* Color Palette - Zen Glassmorphism */
+  --color-canvas-base: #090d10;
+  --color-glass-surface: rgba(15, 23, 42, 0.45);
+  --color-glow-accent: #4ade80; /* Mint Green */
+  --color-text-primary: #f8fafc; /* Slate 50 */
+  --color-text-secondary: #94a3b8; /* Slate 400 */
+  --color-whisper-border: rgba(255, 255, 255, 0.08);
+  --shadow-active-glow: 0 0 12px rgba(74, 222, 128, 0.25);
+  
+  /* Typography */
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  
+  /* Motion & Animations */
+  --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  --transition-smooth: all 0.3s ease;
+}
+
+/* Global Reset & Body Setup */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-canvas-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: 16px;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* Base App Layout */
+.workspace-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-canvas-base);
+  overflow: hidden;
+}
+
+/* Background overlay (for background switching/loading) */
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 0.8s ease-in-out, opacity 0.5s ease;
+  z-index: 0;
+  /* fallback static ambient background styling */
+  background-image: radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8), var(--color-canvas-base));
+}
+
+.main-content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* Typography styles */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin-bottom: 4px;
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 16px;
+}
+
+/* Glassmorphism Panel Component */
+.glass-panel {
+  background: var(--color-glass-surface);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--color-whisper-border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  transition: var(--transition-spring);
+}
+
+/* Floating widgets configuration (responsive position) */
+.floating-widget {
+  position: absolute;
+  bottom: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 380px;
+  padding: 24px;
+  z-index: 10;
+  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Interactive Elements: Glass Buttons */
+.glass-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition-spring);
+  user-select: none;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.glass-button:active {
+  transform: translateY(1px);
+}
+
+.glass-button.primary {
+  background: var(--color-glow-accent);
+  color: var(--color-canvas-base);
+  font-weight: 600;
+  border-color: transparent;
+}
+
+.glass-button.primary:hover {
+  background: #3be873;
+  box-shadow: var(--shadow-active-glow);
+}
+
+/* Interactive Elements: Glass Inputs */
+.glass-input {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--color-whisper-border);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.glass-input:focus {
+  border-color: var(--color-glow-accent);
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.15);
+}
+
+/* Zen Pomodoro Timer Component styling */
+.pomodoro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.pomodoro-ring-outer {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  animation: breathing-slow 8s infinite ease-in-out;
+}
+
+.pomodoro-ring-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-display {
+  font-family: var(--font-mono);
+  font-size: 4.5rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.timer-status {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-glow-accent);
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 16px;
+}
+
+/* Breathing animation for Pomodoro Clock */
+@keyframes breathing-slow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px 0 rgba(74, 222, 128, 0.08);
+    border-color: rgba(74, 222, 128, 0.15);
+  }
+}
+
+/* Floating Action Control Bar (FABs container) */
+.footer-controls {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-whisper-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  z-index: 100;
+}
+
+.fab-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition-spring);
+  user-select: none;
+}
+
+.fab-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-primary);
+  transform: translateY(-2px);
+}
+
+.fab-button:active {
+  transform: translateY(0);
+}
+
+.fab-button.active {
+  background: var(--color-glow-accent);
+  color: var(--color-canvas-base);
+  border-color: transparent;
+  box-shadow: var(--shadow-active-glow);
+}
+
+/* Mixer rows styling */
+.mixer-row {
+  margin: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 140px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  transition: background 0.3s;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-text-secondary);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.volume-slider:hover::-webkit-slider-thumb {
+  background: var(--color-glow-accent);
+  transform: scale(1.2);
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.4);
+}
+
+/* Custom Web Scrollbar implementation following guidance */
+.scroller {
+  --scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --scrollbar-track: rgba(0, 0, 0, 0.2);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+@supports not (scrollbar-color: auto) {
+  .scroller::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scroller::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+  .scroller::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: 3px;
+  }
+}
+
+/* Preset grid layouts */
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.preset-grid .glass-button {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 768px) {
+  .timer-display {
+    font-size: 3.5rem;
+  }
+  .pomodoro-ring-outer {
+    width: 220px;
+    height: 220px;
+  }
+  .floating-widget {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 24px 24px 0 0;
+    border-bottom: none;
+    animation: slideUpMobile 0.4s cubic-bezier(0.175, 0.885, 0.32, 1) forwards;
+  }
+  @keyframes slideUpMobile {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  .footer-controls {
+    bottom: 16px;
+    padding: 6px 12px;
+  }
+}

@@ -29,9 +29,9 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 
 
 ### Milestone 3: Project Setup & Core Styles (Thiết lập dự án & CSS lõi)
-- [ ] Khởi tạo (scaffold) ứng dụng React sử dụng Vite và TypeScript.
-- [ ] Triển khai các CSS căn bản trong `index.css` (định nghĩa các CSS variables cho ảnh nền, tỷ lệ font chữ, hiệu ứng mờ kính glassmorphic panel và layout cho trạng thái focus).
-- [ ] Cài đặt các package cơ bản (ví dụ: `lucide-react` làm thư viện icon chính).
+- [x] Khởi tạo (scaffold) ứng dụng React sử dụng Vite và TypeScript.
+- [x] Triển khai các CSS căn bản trong `index.css` (định nghĩa các CSS variables cho ảnh nền, tỷ lệ font chữ, hiệu ứng mờ kính glassmorphic panel và layout cho trạng thái focus).
+- [x] Cài đặt các package cơ bản (ví dụ: `lucide-react` làm thư viện icon chính).
 
 ### Milestone 4: Widget Implementation (Hiện thực hóa các Widget - Coding)
 - [ ] **Background Switcher Module:** Lập danh sách các ảnh phong cảnh mặc định, xử lý logic chọn ảnh, nhập URL tùy chỉnh và đồng bộ hóa với localStorage.
