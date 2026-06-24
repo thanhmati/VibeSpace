@@ -15,8 +15,8 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   cafe: Coffee
 }
 
-export const AmbientMixer: React.FC = () => {
-  const { isMuted, setIsMuted, setActivePanel } = useWorkspace()
+export const AmbientMixer: React.FC<{ visible: boolean; onClose: () => void }> = ({ visible, onClose }) => {
+  const { isMuted, setIsMuted } = useWorkspace()
 
   // Integrate multi-channel audio loop engine
   const {
@@ -35,6 +35,7 @@ export const AmbientMixer: React.FC = () => {
   }
 
   return (
+    <div style={{ display: visible ? 'contents' : 'none' }}>
     <div 
       className="glass-panel mixer-widget"
       style={{ 
@@ -54,7 +55,7 @@ export const AmbientMixer: React.FC = () => {
         </h2>
         <button
           className="text-text-secondary hover:text-text-primary transition-colors focus:outline-none"
-          onClick={() => setActivePanel(null)}
+          onClick={onClose}
           title="Close Panel"
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px' }}
         >
@@ -171,6 +172,7 @@ export const AmbientMixer: React.FC = () => {
           )
         })}
       </div>
+    </div>
     </div>
   )
 }

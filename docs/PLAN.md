@@ -51,9 +51,22 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 #### Phase 2: Functionality & Third-Party Integration (Hiện thực hóa logic API và Tích hợp bên thứ ba)
 - [x] **Background Switcher Logic:** Cấu hình danh sách ảnh nền mặc định, thiết lập lưu ảnh được chọn/URL ảnh tùy biến vào `localStorage` để tự động khôi phục khi load lại trang.
 - [x] **Pomodoro Timer Precision Hooks:** Xây dựng hook đếm ngược chính xác cao vượt qua cơ chế background throttling của trình duyệt khi chạy ẩn tab, hỗ trợ cấu hình tùy biến thời gian các chu kỳ, phát âm thanh chime báo hiệu và nhấp nháy tab browser.
-- [x] **YouTube Lofi Player Integration:** Tải bất đồng bộ YouTube Iframe Player API, quản lý trạng thái đồng bộ âm lượng, play/pause, dán link nhạc YouTube tự chọn.
+- [x] **YouTube Lofi Player Integration:** Tích hợp YouTube Iframe Player API bất đồng bộ, quản lý play/pause/skip, dán link tùy chỉnh.
+  - **[FIX]** Error handling cho YouTube error codes (100/101/150), loading/unavailable state UI, auto-play khi đổi stream.
+  - **[FIX]** Volume slider + mute toggle UI.
+  - **[FIX]** YouTube thumbnail tự động (`img.youtube.com`) + Unsplash fallback ngẫu nhiên nếu không tải được.
+  - **[FIX]** Validation video qua `noembed.com` API trước khi load — trạng thái checking/valid/invalid rõ ràng.
+  - **[FIX]** `durationKnown` flag để phân biệt "đang chờ load duration" vs "video là live stream thực" — tránh hiển thị `● LIVE` sai cho regular video.
+  - **[FIX]** Kiến trúc Always-mount: `LofiPlayer` luôn mounted trong DOM, chỉ ẩn bằng CSS — nhạc không tắt khi đóng panel hoặc mở widget khác.
+  - **[FIX]** Mở rộng danh sách curated streams từ 3 lên 6 với Video IDs đáng tin cậy hơn.
 - [x] **Ambient Sound Mixer Engine:** Nạp đa kênh và lặp vô hạn các tệp âm thanh HTML5 từ CDN công cộng, hỗ trợ điều chỉnh volume riêng biệt từng track và nút Master Mute nhanh.
+  - **[FIX]** Kiến trúc Always-mount: `AmbientMixer` luôn mounted — white noise không tắt khi đóng panel.
 - [x] **Daily Todo List CRUD:** Xây dựng quản lý tác vụ (thêm, xóa, check hoàn thành), tính toán tiến trình % hoàn thành trực quan, và lập logic tự động xóa danh sách khi phát hiện chuyển sang ngày mới.
+
+#### Phase 3: Architecture Refactor — Persistent Audio State
+- [x] **WorkspaceContext refactor:** Tách `activePanel` thành `musicPanelOpen` (boolean) + `mixerPanelOpen` (boolean) độc lập nhau. Cho phép Music và Ambient Mixer mở đồng thời mà không đóng nhau.
+- [x] **Multi-panel support:** Music panel và Mixer panel có thể mở song song cùng lúc. Todo/Background vẫn exclusive với nhau nhưng không ảnh hưởng tới audio.
+- [x] **utils/youtube.ts mở rộng:** Thêm `getYouTubeThumbnail()`, `getRandomFallbackImage()`, `validateYouTubeVideo()` (noembed.com, không cần API key). Sửa regex playlist để lọc Mix/Watch Later tự động.
 
 ### Milestone 5: Integration & Polish (Tích hợp & Tối ưu)
 - [x] Lắp ráp các widget riêng lẻ vào dashboard theo dạng grid linh hoạt, responsive tốt.
@@ -81,3 +94,6 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 | **CODE-08** | Hiệu ứng phản hồi thị giác và tương tác nhỏ (hover effect, custom scrollbars) | 1.5 hrs |
 | **CODE-09** | Verification (Kiểm thử chức năng) & kiểm tra tương thích đa trình duyệt | 1 hr |
 | **FIX-01** | Đồng bộ giao diện 100% theo thiết kế Stitch và sửa lỗi console, vỡ layout | 3 hrs |
+| **FIX-02** | Fix Music feature: error handling, volume UI, thumbnail, video validation | 1.5 hrs |
+| **FIX-03** | Fix LIVE duration bug: `durationKnown` flag để tránh nhầm regular video thành live | 0.5 hr |
+| **FIX-04** | Refactor kiến trúc: Always-mount audio panels, persistent playback state | 1 hr |

@@ -232,6 +232,18 @@ body, html {
   100% { transform: scale(1); }
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-bar {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0.3; }
+}
+
+
 .active-session .timer-ring-container {
   animation: pulse-ring 4s infinite cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
@@ -909,6 +921,30 @@ input[type=range].slider-active::-webkit-slider-thumb {
   background: rgba(107, 251, 154, 0.08);
   border-color: rgba(107, 251, 154, 0.2);
 }
+
+/* ── Volume Slider (transparent range, visual overlay) ── */
+input[type="range"].volume-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.5);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+input[type="range"].volume-thumb::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+input[type="range"].volume-thumb::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: none;
+  cursor: pointer;
+}
+
 
 /* Styled Toggle Switches */
 .switch-toggle {

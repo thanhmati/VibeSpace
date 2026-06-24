@@ -2,12 +2,19 @@ import React, { createContext, useContext, useState, type ReactNode } from 'reac
 import { BACKGROUND_PRESETS } from '../data/mockData'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
-export type PanelType = 'music' | 'mixer' | 'todo' | 'background' | null
+// PanelType now tracks which non-audio panel is visible (music/mixer are independent)
+export type PanelType = 'todo' | 'background' | null
 export type TimerSessionType = 'focus' | 'short' | 'long'
 
 interface WorkspaceContextProps {
+  // Non-audio floating panels (mutually exclusive)
   activePanel: PanelType
   setActivePanel: (panel: PanelType) => void
+  // Audio panel visibility (independent — both can be open simultaneously)
+  musicPanelOpen: boolean
+  setMusicPanelOpen: (open: boolean) => void
+  mixerPanelOpen: boolean
+  setMixerPanelOpen: (open: boolean) => void
   backgroundImage: string
   setBackgroundImage: (url: string) => void
   overlayOpacity: number
@@ -24,6 +31,8 @@ const WorkspaceContext = createContext<WorkspaceContextProps | undefined>(undefi
 
 export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [activePanel, setActivePanel] = useState<PanelType>(null)
+  const [musicPanelOpen, setMusicPanelOpen] = useState(false)
+  const [mixerPanelOpen, setMixerPanelOpen] = useState(false)
   const [backgroundImage, setBackgroundImage] = useLocalStorage<string>('workspace-bg', BACKGROUND_PRESETS[0].url)
   const [overlayOpacity, setOverlayOpacity] = useLocalStorage<number>('workspace-opacity', 0.2)
   const [isMuted, setIsMuted] = useLocalStorage<boolean>('workspace-muted', false)
@@ -35,6 +44,10 @@ export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({ children 
       value={{
         activePanel,
         setActivePanel,
+        musicPanelOpen,
+        setMusicPanelOpen,
+        mixerPanelOpen,
+        setMixerPanelOpen,
         backgroundImage,
         setBackgroundImage,
         overlayOpacity,
@@ -44,7 +57,7 @@ export const WorkspaceProvider: React.FC<{ children: ReactNode }> = ({ children 
         activeTimerSession,
         setActiveTimerSession,
         isTimerRunning,
-        setIsTimerRunning
+        setIsTimerRunning,
       }}
     >
       {children}
