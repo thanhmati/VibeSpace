@@ -20,7 +20,13 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 - [x] Tạo các bản vẽ UI mockups và các biến thể (variants) cho màn hình VibeSpace trên Google Stitch:
   - **Screen 1:** Focus Board (Dashboard chính, ID: `0cae0fea5b914313bcb3742b95fc663c`).
   - **Screen 2:** Collapsed Workspace Mode (Chế độ tối giản siêu sạch, ID: `8d8ae15942894609bceeb82e42c569bd`).
-- [x] Lấy feedback của user để cải tiến thiết kế trên Stitch (Đã chốt phong cách Glassmorphism Zen Focus).
+- [x] Thiết kế chi tiết các Component / Popups tương tác cụ thể:
+  - **Component 1 (Lofi Music Panel):** Giao diện chọn bài nhạc & nhập URL phát nhạc (ID: `61586832d28a45a3ac8d4b1a95c7bb2e`).
+  - **Component 2 (Ambient Mixer Panel):** Bộ trộn âm thanh nền có thanh trượt kéo volume độc lập (ID: `39f2b7f0279244e0ab65345b70e6768a`).
+  - **Component 3 (Todo List Panel):** Thẻ checklist hiển thị tiến độ % và chức năng Add Task (ID: `cf5d5e4a1d4a40a689b44db03b974d80`).
+  - **Component 4 (Background Switcher Panel):** Bộ đổi ảnh nền và chỉnh độ mờ đục card (ID: `ed178fc6296340eda145bf05f0b021ee`).
+- [x] Lấy feedback của user để cải tiến thiết kế trên Stitch (Đã chốt phong cách Glassmorphism Zen Focus và hoàn thiện chi tiết các thành phần).
+
 
 ### Milestone 3: Project Setup & Core Styles (Thiết lập dự án & CSS lõi)
 - [ ] Khởi tạo (scaffold) ứng dụng React sử dụng Vite và TypeScript.
