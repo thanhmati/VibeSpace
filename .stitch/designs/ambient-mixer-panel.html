@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VibeSpace Ambient Mixer Panel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#869486",
+                        "secondary-container": "#43474b",
+                        "tertiary-container": "#ffb47f",
+                        "surface": "#0e150f",
+                        "on-tertiary": "#4f2500",
+                        "primary-fixed": "#6dfe9c",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#ffb784",
+                        "text-primary": "#f8fafc",
+                        "surface-container-high": "#242c25",
+                        "surface-bright": "#333b34",
+                        "active-glow": "rgba(74, 222, 128, 0.15)",
+                        "on-primary-fixed-variant": "#005227",
+                        "on-tertiary-fixed": "#301400",
+                        "on-surface-variant": "#bccabb",
+                        "surface-variant": "#2f372f",
+                        "whisper-border": "rgba(255, 255, 255, 0.08)",
+                        "secondary-fixed-dim": "#c4c7cb",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#ffdcc6",
+                        "primary": "#6bfb9a",
+                        "surface-dim": "#0e150f",
+                        "surface-container-highest": "#2f372f",
+                        "inverse-primary": "#006d36",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#dde5da",
+                        "secondary": "#c4c7cb",
+                        "tertiary": "#ffd9c1",
+                        "on-secondary-fixed-variant": "#43474b",
+                        "on-surface": "#dde5da",
+                        "on-primary-fixed": "#00210c",
+                        "surface-container-low": "#161d17",
+                        "on-primary-container": "#005e2d",
+                        "on-secondary-fixed": "#181c1f",
+                        "on-primary": "#003919",
+                        "on-secondary": "#2d3134",
+                        "primary-fixed-dim": "#4de082",
+                        "canvas-base": "#090d10",
+                        "background": "#0e150f",
+                        "on-tertiary-fixed-variant": "#6c3a0f",
+                        "text-secondary": "#94a3b8",
+                        "on-error-container": "#ffdad6",
+                        "surface-container": "#1a211b",
+                        "primary-container": "#4ade80",
+                        "on-secondary-container": "#b2b5ba",
+                        "secondary-fixed": "#e0e3e7",
+                        "inverse-on-surface": "#2b322b",
+                        "surface-tint": "#4de082",
+                        "on-tertiary-container": "#794418",
+                        "surface-container-lowest": "#09100a",
+                        "glass-surface": "rgba(15, 23, 42, 0.45)",
+                        "outline-variant": "#3d4a3e",
+                        "on-background": "#dde5da"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "fab-size": "48px",
+                        "section-gap": "2rem",
+                        "container-todo": "400px",
+                        "inner-padding": "1.5rem",
+                        "container-music": "360px"
+                    },
+                    "fontFamily": {
+                        "mono-label": ["JetBrains Mono"],
+                        "h2": ["Outfit"],
+                        "display-timer": ["JetBrains Mono"],
+                        "label-sm": ["Outfit"],
+                        "body-lg": ["Outfit"],
+                        "display-timer-mobile": ["JetBrains Mono"],
+                        "body-md": ["Outfit"],
+                        "h1": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "mono-label": ["12px", { "lineHeight": "1", "fontWeight": "400" }],
+                        "h2": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "display-timer": ["80px", { "lineHeight": "1", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "label-sm": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-timer-mobile": ["48px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "h1": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 23, 42, 0.45);
+        }
+        
+        .custom-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+        
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ade80;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+        
+        .custom-slider:hover::-webkit-slider-thumb {
+            opacity: 1;
+        }
+        
+        .custom-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ade80;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            border: none;
+        }
+        
+        .custom-slider:hover::-moz-range-thumb {
+            opacity: 1;
+        }
+        
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #4ade80;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #4ade80;
+        }
+    </style>
+</head>
+<body class="bg-canvas-base text-text-primary antialiased min-h-screen relative overflow-hidden font-body-md">
+<!-- Background Image -->
+<div class="absolute inset-0 bg-cover bg-center bg-no-repeat w-full h-full -z-10" data-alt="A moody, atmospheric scene viewed through a rain-streaked window. Beyond the glass, a dense pine forest is enveloped in heavy, cool blue mist and pouring rain. In the distance, a small wooden cabin glows with warm, inviting amber light from its windows. On the interior windowsill, a vintage oil lamp casts a bright, comforting glow, illuminating an open book and a cozy, softly draped woolen blanket. The aesthetic is Minimalist Glassmorphism with a Zen Focus, emphasizing infinite depth, cinematic lighting, and a serene, meditative mood." style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtk7JyIKn0jarZVchY_jsopYEOD3rNWobD2WTdmrKSAy26ql5_YkvXJOkxo4mHg5le-hOG5LOnuBptGp7ryUFKyVEcen_VgTg90TU3XEIjtzD07Yqdgdbpe-_FQq5R5JDAn6WGR7yYOwYCzVyYofsHkSl4Ighy_m3OiNwWrAO2aIMj24IMDNSVBgVoKo6PKqK9w4EXUOfUs3zt86gArfI5G4Eyk047IJj69ES3PUpHW0yd2yFoGNPEwOQ')"></div>
+<div class="absolute inset-0 bg-black/30 -z-10"></div> <!-- Subtle dark overlay for contrast -->
+<!-- TopAppBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-transparent backdrop-blur-24 saturate-180 flat no shadows hidden md:flex">
+<div class="font-h2 text-h2 font-medium text-primary">VibeSpace</div>
+<div class="flex gap-4">
+<button class="text-on-surface-variant hover:bg-active-glow transition-colors rounded-full p-2 active:scale-95 duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-on-surface-variant hover:bg-active-glow transition-colors rounded-full p-2 active:scale-95 duration-200">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Area - Centered Zen Layout -->
+<main class="relative w-full h-screen flex items-center justify-center p-4">
+<!-- VibeSpace Ambient Mixer Panel -->
+<div class="glass-panel w-full max-w-[400px] rounded-[20px] p-inner-padding shadow-32 flex flex-col gap-6 relative z-10 animate-[fadeIn_0.5s_ease-out]">
+<!-- Header -->
+<div class="flex items-center justify-between">
+<h2 class="font-h2 text-h2 text-text-primary font-bold">Ambient Sounds</h2>
+<button class="text-text-secondary hover:text-text-primary transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Master Mute -->
+<div class="flex items-center justify-between pb-4 border-b border-whisper-border">
+<span class="font-body-md text-text-primary">Mute All Sounds</span>
+<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer top-0 bottom-0 m-auto right-auto left-0 z-10" id="master-mute" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-surface-variant cursor-pointer" for="master-mute"></label>
+</div>
+</div>
+<!-- Sound List -->
+<div class="flex flex-col gap-5">
+<!-- Rain -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3 text-text-primary">
+<span class="material-symbols-outlined text-primary-container">water_drop</span>
+<span class="font-body-md">Rain</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-mono-label text-mono-label text-text-secondary w-8 text-right">70%</span>
+<div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer top-0 bottom-0 m-auto right-0 z-10" id="toggle-rain" name="toggle-rain" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-primary-container cursor-pointer" for="toggle-rain"></label>
+</div>
+</div>
+</div>
+<input class="custom-slider" max="100" min="0" style="background: linear-gradient(to right, #4ade80 70%, rgba(255, 255, 255, 0.1) 70%);" type="range" value="70"/>
+</div>
+<!-- Campfire -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3 text-text-primary">
+<span class="material-symbols-outlined text-primary-container">local_fire_department</span>
+<span class="font-body-md">Campfire</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-mono-label text-mono-label text-text-secondary w-8 text-right">40%</span>
+<div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer top-0 bottom-0 m-auto right-0 z-10" id="toggle-campfire" name="toggle-campfire" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-primary-container cursor-pointer" for="toggle-campfire"></label>
+</div>
+</div>
+</div>
+<input class="custom-slider" max="100" min="0" style="background: linear-gradient(to right, #4ade80 40%, rgba(255, 255, 255, 0.1) 40%);" type="range" value="40"/>
+</div>
+<!-- Forest Breeze -->
+<div class="flex flex-col gap-2 opacity-50">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3 text-text-secondary">
+<span class="material-symbols-outlined">air</span>
+<span class="font-body-md">Forest Breeze</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-mono-label text-mono-label text-text-secondary w-8 text-right">0%</span>
+<div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer top-0 bottom-0 m-auto right-auto left-0 z-10" disabled="" id="toggle-breeze" name="toggle-breeze" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-surface-variant cursor-not-allowed" for="toggle-breeze"></label>
+</div>
+</div>
+</div>
+<input class="custom-slider cursor-not-allowed" disabled="" max="100" min="0" type="range" value="0"/>
+</div>
+<!-- Ocean Waves -->
+<div class="flex flex-col gap-2 opacity-50">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3 text-text-secondary">
+<span class="material-symbols-outlined">waves</span>
+<span class="font-body-md">Ocean Waves</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-mono-label text-mono-label text-text-secondary w-8 text-right">0%</span>
+<div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer top-0 bottom-0 m-auto right-auto left-0 z-10" disabled="" id="toggle-waves" name="toggle-waves" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-surface-variant cursor-not-allowed" for="toggle-waves"></label>
+</div>
+</div>
+</div>
+<input class="custom-slider cursor-not-allowed" disabled="" max="100" min="0" type="range" value="0"/>
+</div>
+<!-- Coffee Shop -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3 text-text-primary">
+<span class="material-symbols-outlined text-primary-container">coffee</span>
+<span class="font-body-md">Coffee Shop</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-mono-label text-mono-label text-text-secondary w-8 text-right">20%</span>
+<div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer top-0 bottom-0 m-auto right-0 z-10" id="toggle-coffee" name="toggle-coffee" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-5 rounded-full bg-primary-container cursor-pointer" for="toggle-coffee"></label>
+</div>
+</div>
+</div>
+<input class="custom-slider" max="100" min="0" style="background: linear-gradient(to right, #4ade80 20%, rgba(255, 255, 255, 0.1) 20%);" type="range" value="20"/>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 px-4 py-2 bg-glass-surface backdrop-blur-24 border border-whisper-border shadow-32 rounded-full mx-auto w-fit md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-3 hover:bg-surface-variant rounded-full active:translate-y-[1px] transition-all" style="transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.1);">
+<span class="material-symbols-outlined">timer</span>
+<span class="font-label-sm text-label-sm mt-1">Focus</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full p-3 hover:bg-surface-variant active:translate-y-[1px] transition-all" style="transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.1);">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+<span class="font-label-sm text-label-sm mt-1">Sounds</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-3 hover:bg-surface-variant rounded-full active:translate-y-[1px] transition-all" style="transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.1);">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="font-label-sm text-label-sm mt-1">Tasks</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-3 hover:bg-surface-variant rounded-full active:translate-y-[1px] transition-all" style="transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.1);">
+<span class="material-symbols-outlined">library_music</span>
+<span class="font-label-sm text-label-sm mt-1">Library</span>
+</button>
+</nav>
+<script>
+        // Simple script to update slider visual track on input
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', function() {
+                const value = this.value;
+                this.style.background = `linear-gradient(to right, #4ade80 ${value}%, rgba(255, 255, 255, 0.1) ${value}%)`;
+                // Update sibling numeric value if exists
+                const valueDisplay = this.parentElement.querySelector('.text-mono-label');
+                if(valueDisplay) valueDisplay.textContent = `${value}%`;
+                
+                // Auto toggle on if sliding up from 0
+                const toggle = this.parentElement.querySelector('input[type="checkbox"]');
+                if(toggle && value > 0 && !toggle.checked) {
+                    toggle.checked = true;
+                    this.parentElement.classList.remove('opacity-50');
+                    const icon = this.parentElement.querySelector('.material-symbols-outlined');
+                    icon.classList.add('text-primary-container');
+                    icon.parentElement.classList.remove('text-text-secondary');
+                    icon.parentElement.classList.add('text-text-primary');
+                }
+            });
+        });
+    </script>
+</body></html>

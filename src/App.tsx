@@ -1,132 +1,106 @@
-import { useState } from 'react'
-import { Play, RotateCcw, Music, Volume2, CheckSquare, Image as ImageIcon } from 'lucide-react'
+import { Settings, Sprout, Music, Sliders, ClipboardList, Palette } from 'lucide-react'
+import { WorkspaceProvider, useWorkspace } from './context/WorkspaceContext'
+import { PomodoroTimer } from './components/Pomodoro/PomodoroTimer'
+import { LofiPlayer } from './components/MusicPlayer/LofiPlayer'
+import { AmbientMixer } from './components/SoundMixer/AmbientMixer'
+import { TodoWidget } from './components/TodoList/TodoWidget'
+import { BackgroundSwitcher } from './components/Background/BackgroundSwitcher'
 
-function App() {
-  const [activePanel, setActivePanel] = useState<'music' | 'mixer' | 'todo' | 'background' | null>(null)
+function WorkspaceContent() {
+  const {
+    activePanel,
+    setActivePanel,
+    backgroundImage,
+    overlayOpacity
+  } = useWorkspace()
 
-  const togglePanel = (panel: 'music' | 'mixer' | 'todo' | 'background') => {
+  const handlePanelToggle = (panel: 'music' | 'mixer' | 'todo' | 'background') => {
     setActivePanel(activePanel === panel ? null : panel)
   }
 
   return (
     <div className="workspace-container">
-      {/* Background Layer with overlay */}
-      <div className="background-overlay" style={{ opacity: 0.35 }}></div>
+      {/* Background Image Layer */}
+      <div 
+        className="workspace-bg"
+        style={{ backgroundImage: `url('${backgroundImage}')` }}
+      />
+      {/* Background Dark Overlay for text readability */}
+      <div 
+        className="workspace-overlay"
+        style={{ opacity: overlayOpacity }}
+      />
 
-      {/* Main Content Area */}
-      <main className="main-content">
-        {/* Centered Zen Pomodoro Clock */}
-        <div className="pomodoro-container">
-          <div className="pomodoro-ring-outer">
-            <div className="pomodoro-ring-inner">
-              <span className="timer-display">25:00</span>
-              <span className="timer-status">Focus Session</span>
-            </div>
-          </div>
-          <div className="timer-controls">
-            <button className="glass-button primary">
-              <Play size={16} /> Start
-            </button>
-            <button className="glass-button">
-              <RotateCcw size={16} /> Reset
-            </button>
-          </div>
+      {/* Top Navbar */}
+      <nav className="top-nav">
+        <div className="nav-brand">VibeSpace</div>
+        <div className="nav-actions">
+          <button className="nav-icon-btn" title="System Settings">
+            <Settings size={20} />
+          </button>
+          <button className="nav-icon-btn" title="Zen Ecology">
+            <Sprout size={20} />
+          </button>
+          <img 
+            className="profile-avatar" 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ6LpDZxef7WQ34mcgR__w024LcApU7lqDosE_WJSCcHjv0ElCDNnP2_kuo38BCXl_-pY0LHdHs-r12fHeR8Gsbr37XTVJmVkTaSySXhBp1DmhP1re8NGtUFURXjEUH-NrDFlsO54dV2-vlOlnC_Rih7ZYDBlCy4U58O-0Lg3N-i2Yg3bO2z5JnU9btn3DoE7UPI6eWBwA7nPaGL6GtrpfGsGYT4lYSd0n9pttvrSYlLaz5BUc4It0uz_1JQpX5_uzoQ27p5thjvc" 
+            alt="Profile Avatar"
+          />
         </div>
+      </nav>
+
+      {/* Main Area */}
+      <main className="main-workspace">
+        {/* Center Clock */}
+        <PomodoroTimer />
+
+        {/* Absolute Floating Panels */}
+        {activePanel === 'music' && <LofiPlayer />}
+        {activePanel === 'mixer' && <AmbientMixer />}
+        {activePanel === 'todo' && <TodoWidget />}
+        {activePanel === 'background' && <BackgroundSwitcher />}
       </main>
 
-      {/* Floating Control Panels */}
-      {activePanel === 'music' && (
-        <div className="glass-panel floating-widget music-widget">
-          <h3>Lofi Player</h3>
-          <p className="subtitle">Choose a stream or paste your own</p>
-          <div className="widget-content">
-            <input type="text" className="glass-input" placeholder="YouTube URL..." />
-            <button className="glass-button primary" style={{ width: '100%', marginTop: '12px' }}>
-              Load Video
-            </button>
-          </div>
-        </div>
-      )}
-
-      {activePanel === 'mixer' && (
-        <div className="glass-panel floating-widget mixer-widget">
-          <h3>Ambient Sound Mixer</h3>
-          <p className="subtitle">Mix your own soundscapes</p>
-          <div className="widget-content scroller" style={{ maxHeight: '200px', overflowY: 'auto' }}>
-            {['Rain', 'Campfire', 'Wind', 'Waves', 'Coffee Shop'].map((sound) => (
-              <div key={sound} className="mixer-row" style={{ display: 'flex', alignItems: 'center', margin: '12px 0' }}>
-                <span style={{ flex: 1 }}>{sound}</span>
-                <input type="range" className="volume-slider" min="0" max="100" defaultValue="50" />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activePanel === 'todo' && (
-        <div className="glass-panel floating-widget todo-widget">
-          <h3>Daily Todo List</h3>
-          <p className="subtitle">Keep track of tasks</p>
-          <div className="widget-content">
-            <div className="todo-input-group" style={{ display: 'flex', gap: '8px' }}>
-              <input type="text" className="glass-input" placeholder="Add task..." style={{ flex: 1 }} />
-              <button className="glass-button primary">Add</button>
-            </div>
-            <div className="todo-list scroller" style={{ maxHeight: '150px', overflowY: 'auto', marginTop: '12px' }}>
-              <div style={{ padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                Placeholder Task
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activePanel === 'background' && (
-        <div className="glass-panel floating-widget background-widget">
-          <h3>Background Switcher</h3>
-          <p className="subtitle">Choose a background style</p>
-          <div className="widget-content">
-            <input type="text" className="glass-input" placeholder="Image URL..." />
-            <div className="preset-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', marginTop: '12px' }}>
-              <button className="glass-button">Forest</button>
-              <button className="glass-button">Ocean</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Floating Action Buttons (FABs) at Bottom */}
-      <footer className="footer-controls">
+      {/* Bottom Dock Navigation */}
+      <nav className="dock-nav glass-panel">
         <button 
-          className={`fab-button ${activePanel === 'music' ? 'active' : ''}`}
-          onClick={() => togglePanel('music')}
+          className={`dock-btn ${activePanel === 'music' ? 'active' : ''}`}
+          onClick={() => handlePanelToggle('music')}
           title="Lofi Music"
         >
-          <Music size={20} />
+          <Music size={22} />
         </button>
         <button 
-          className={`fab-button ${activePanel === 'mixer' ? 'active' : ''}`}
-          onClick={() => togglePanel('mixer')}
-          title="Ambient Mixer"
+          className={`dock-btn ${activePanel === 'mixer' ? 'active' : ''}`}
+          onClick={() => handlePanelToggle('mixer')}
+          title="Atmosphere Sounds"
         >
-          <Volume2 size={20} />
+          <Sliders size={22} />
         </button>
         <button 
-          className={`fab-button ${activePanel === 'todo' ? 'active' : ''}`}
-          onClick={() => togglePanel('todo')}
-          title="Todo List"
+          className={`dock-btn ${activePanel === 'todo' ? 'active' : ''}`}
+          onClick={() => handlePanelToggle('todo')}
+          title="Tasks checklist"
         >
-          <CheckSquare size={20} />
+          <ClipboardList size={22} />
         </button>
         <button 
-          className={`fab-button ${activePanel === 'background' ? 'active' : ''}`}
-          onClick={() => togglePanel('background')}
-          title="Change Vibe"
+          className={`dock-btn ${activePanel === 'background' ? 'active' : ''}`}
+          onClick={() => handlePanelToggle('background')}
+          title="Vibe Theme"
         >
-          <ImageIcon size={20} />
+          <Palette size={22} />
         </button>
-      </footer>
+      </nav>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <WorkspaceProvider>
+      <WorkspaceContent />
+    </WorkspaceProvider>
   )
 }
 

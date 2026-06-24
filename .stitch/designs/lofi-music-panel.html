@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VibeSpace Lofi Music Panel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#ffd9c1",
+                        "surface-bright": "#333b34",
+                        "tertiary-container": "#ffb47f",
+                        "on-surface-variant": "#bccabb",
+                        "primary-fixed-dim": "#4de082",
+                        "primary-container": "#4ade80",
+                        "outline-variant": "#3d4a3e",
+                        "surface-dim": "#0e150f",
+                        "surface-tint": "#4de082",
+                        "error-container": "#93000a",
+                        "on-surface": "#dde5da",
+                        "secondary-fixed": "#e0e3e7",
+                        "on-tertiary-fixed": "#301400",
+                        "secondary-container": "#43474b",
+                        "on-primary-fixed-variant": "#005227",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#2b322b",
+                        "on-primary": "#003919",
+                        "inverse-surface": "#dde5da",
+                        "surface-container-highest": "#2f372f",
+                        "error": "#ffb4ab",
+                        "primary": "#6bfb9a",
+                        "on-tertiary-fixed-variant": "#6c3a0f",
+                        "on-secondary": "#2d3134",
+                        "surface-container-low": "#161d17",
+                        "on-background": "#dde5da",
+                        "whisper-border": "rgba(255, 255, 255, 0.08)",
+                        "on-secondary-fixed": "#181c1f",
+                        "on-primary-container": "#005e2d",
+                        "text-secondary": "#94a3b8",
+                        "on-tertiary-container": "#794418",
+                        "on-primary-fixed": "#00210c",
+                        "canvas-base": "#090d10",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-tertiary": "#4f2500",
+                        "secondary-fixed-dim": "#c4c7cb",
+                        "surface-variant": "#2f372f",
+                        "on-secondary-fixed-variant": "#43474b",
+                        "surface-container-high": "#242c25",
+                        "glass-surface": "rgba(15, 23, 42, 0.45)",
+                        "surface-container-lowest": "#09100a",
+                        "on-secondary-container": "#b2b5ba",
+                        "inverse-primary": "#006d36",
+                        "outline": "#869486",
+                        "active-glow": "rgba(74, 222, 128, 0.15)",
+                        "background": "#0e150f",
+                        "surface-container": "#1a211b",
+                        "surface": "#0e150f",
+                        "on-error": "#690005",
+                        "secondary": "#c4c7cb",
+                        "tertiary-fixed-dim": "#ffb784",
+                        "text-primary": "#f8fafc",
+                        "primary-fixed": "#6dfe9c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "fab-size": "48px",
+                        "container-music": "360px",
+                        "container-todo": "400px",
+                        "section-gap": "2rem",
+                        "inner-padding": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Outfit"],
+                        "h1": ["Outfit"],
+                        "display-timer": ["JetBrains Mono"],
+                        "mono-label": ["JetBrains Mono"],
+                        "display-timer-mobile": ["JetBrains Mono"],
+                        "h2": ["Outfit"],
+                        "body-md": ["Outfit"],
+                        "body-lg": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "h1": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "display-timer": ["80px", { "lineHeight": "1", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "mono-label": ["12px", { "lineHeight": "1", "fontWeight": "400" }],
+                        "display-timer-mobile": ["48px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "h2": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: theme('colors.glass-surface');
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid theme('colors.whisper-border');
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .visualizer-bar {
+            width: 3px;
+            background-color: theme('colors.primary-container');
+            border-radius: 2px;
+            animation: equalize 1s infinite ease-in-out;
+            transform-origin: bottom;
+        }
+
+        .visualizer-bar:nth-child(1) { animation-delay: -0.4s; height: 10px; }
+        .visualizer-bar:nth-child(2) { animation-delay: -0.2s; height: 16px; }
+        .visualizer-bar:nth-child(3) { animation-delay: 0s; height: 12px; }
+
+        @keyframes equalize {
+            0%, 100% { transform: scaleY(0.4); }
+            50% { transform: scaleY(1); }
+        }
+
+        .btn-primary {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 0 1px theme('colors.primary-container'), 0 0 10px theme('colors.active-glow');
+        }
+    </style>
+</head>
+<body class="bg-canvas-base text-text-primary min-h-screen flex flex-col font-body-md overflow-hidden antialiased">
+<!-- Global Background Context -->
+<div aria-hidden="true" class="fixed inset-0 z-[-1] bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtk7JyIKn0jarZVchY_jsopYEOD3rNWobD2WTdmrKSAy26ql5_YkvXJOkxo4mHg5le-hOG5LOnuBptGp7ryUFKyVEcen_VgTg90TU3XEIjtzD07Yqdgdbpe-_FQq5R5JDAn6WGR7yYOwYCzVyYofsHkSl4Ighy_m3OiNwWrAO2aIMj24IMDNSVBgVoKo6PKqK9w4EXUOfUs3zt86gArfI5G4Eyk047IJj69ES3PUpHW0yd2yFoGNPEwOQ');"></div>
+<div aria-hidden="true" class="fixed inset-0 z-[-1] bg-black/30 backdrop-blur-sm"></div>
+<!-- Main Container (Zen Centered) -->
+<main class="flex-grow flex items-center justify-center p-4">
+<!-- Lofi Music Panel -->
+<section class="glass-panel w-container-music rounded-2xl overflow-hidden flex flex-col transform transition-all duration-300">
+<!-- Header -->
+<div class="flex items-center justify-between p-inner-padding pb-4 border-b border-whisper-border">
+<h2 class="font-h2 text-text-primary m-0">Lofi Music</h2>
+<button class="text-text-secondary hover:text-text-primary transition-colors p-1 rounded-full hover:bg-white/5 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-container">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="p-inner-padding flex flex-col gap-section-gap overflow-y-auto custom-scrollbar">
+<!-- Section 1: Now Playing -->
+<div class="flex flex-col gap-4">
+<h3 class="font-label-sm text-text-secondary uppercase tracking-wider mb-2">Now Playing</h3>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border border-whisper-border shadow-lg">
+<img alt="Lofi cover art showing rainy window in Tokyo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZR74iSE1uiOczrhPFVU56qhjv3DsUG7CRLInXhFzxrTA3PIyrPkOo7rUR78krXcXfhGvKIXkOQSXWYO9c3H5VPRrmjwcxsiXkzAfup9Mbiqw8xswNESWwbMiyAgTt6sTytxt6MQhu-eObg7pAjpHCBlfN__-z_p_Y90gLV02FCAE6gbqg1v_-TLQxGFQWrkkFbamU9M27-bpXBrWchRsLkEkBSwcdhtVSChS2Jxk8RZ8GzgUPvjIeB7S3z0R9VAgfSONa06SUpck"/>
+</div>
+<div class="flex-grow min-w-0">
+<h4 class="font-label-sm text-text-primary truncate">Rainy Night in Tokyo</h4>
+<p class="font-mono-label text-text-secondary truncate mt-1">Lofi Girl</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full mt-2">
+<div class="h-1 bg-white/10 rounded-full overflow-hidden w-full relative">
+<div class="absolute top-0 left-0 h-full bg-primary-container w-[45%] rounded-full shadow-[0_0_8px_rgba(74,222,128,0.5)]"></div>
+</div>
+<div class="flex justify-between mt-2 font-mono-label text-text-secondary text-[10px]">
+<span>28:42</span>
+<span>1:15:00</span>
+</div>
+</div>
+<!-- Controls -->
+<div class="flex items-center justify-center gap-6 mt-2">
+<button class="text-text-secondary hover:text-text-primary transition-colors focus:outline-none p-2 rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined text-[24px]">skip_previous</span>
+</button>
+<button class="text-text-primary bg-white/5 hover:bg-white/10 transition-colors p-3 rounded-full focus:outline-none border border-whisper-border shadow-lg active:scale-95">
+<span class="material-symbols-outlined text-[32px]">play_arrow</span>
+</button>
+<button class="text-text-secondary hover:text-text-primary transition-colors focus:outline-none p-2 rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined text-[24px]">skip_next</span>
+</button>
+</div>
+</div>
+<div class="h-px bg-whisper-border w-full"></div>
+<!-- Section 2: Curated Streams -->
+<div class="flex flex-col gap-3">
+<h3 class="font-label-sm text-text-secondary uppercase tracking-wider mb-1">Curated Streams</h3>
+<ul class="flex flex-col gap-1 -mx-2">
+<!-- Active Stream -->
+<li>
+<button class="w-full flex items-center justify-between p-2 rounded-lg bg-white/10 border border-whisper-border text-left group focus:outline-none">
+<div class="flex items-center gap-3 truncate">
+<div class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_5px_rgba(74,222,128,0.5)]"></div>
+<span class="font-label-sm text-text-primary truncate">Lofi Girl Live Stream</span>
+</div>
+<div class="flex items-end h-4 gap-[2px] opacity-100 transition-opacity">
+<div class="visualizer-bar"></div>
+<div class="visualizer-bar"></div>
+<div class="visualizer-bar"></div>
+</div>
+</button>
+</li>
+<!-- Inactive Stream 1 -->
+<li>
+<button class="w-full flex items-center justify-between p-2 rounded-lg hover:bg-white/5 text-left group focus:outline-none transition-colors border border-transparent">
+<div class="flex items-center gap-3 truncate">
+<div class="w-2 h-2 rounded-full bg-transparent"></div>
+<span class="font-label-sm text-text-secondary group-hover:text-text-primary transition-colors truncate">Chillhop Café Radio</span>
+</div>
+</button>
+</li>
+<!-- Inactive Stream 2 -->
+<li>
+<button class="w-full flex items-center justify-between p-2 rounded-lg hover:bg-white/5 text-left group focus:outline-none transition-colors border border-transparent">
+<div class="flex items-center gap-3 truncate">
+<div class="w-2 h-2 rounded-full bg-transparent"></div>
+<span class="font-label-sm text-text-secondary group-hover:text-text-primary transition-colors truncate">Cozy Coffee Shop Jazz</span>
+</div>
+</button>
+</li>
+</ul>
+</div>
+<div class="h-px bg-whisper-border w-full"></div>
+<!-- Section 3: Custom YouTube Link -->
+<div class="flex flex-col gap-3">
+<h3 class="font-label-sm text-text-secondary uppercase tracking-wider mb-1">Custom YouTube Link</h3>
+<div class="flex gap-2">
+<input class="flex-grow bg-black/30 border border-whisper-border rounded-lg px-3 py-2 text-text-primary font-body-md placeholder:text-text-secondary/50 focus:outline-none focus:border-primary-container transition-colors shadow-inner min-w-0" placeholder="Paste YouTube Video/Playlist URL..." type="text"/>
+<button class="btn-primary bg-primary-container hover:bg-primary-fixed text-canvas-base font-label-sm px-4 py-2 rounded-lg font-semibold flex items-center justify-center whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-canvas-base shadow-lg shadow-primary-container/20">
+                            Add
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

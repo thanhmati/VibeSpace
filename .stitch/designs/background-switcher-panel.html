@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VibeSpace Background Switcher</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #4ade80;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        input[type=range]:hover::-webkit-slider-thumb,
+        input[type=range]:focus::-webkit-slider-thumb {
+            opacity: 1;
+        }
+
+        input[type=range]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #4ade80;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            border: none;
+        }
+        
+        input[type=range]:hover::-moz-range-thumb,
+        input[type=range]:focus::-moz-range-thumb {
+            opacity: 1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#005e2d",
+                        "secondary-fixed": "#e0e3e7",
+                        "surface-container-high": "#242c25",
+                        "surface-tint": "#4de082",
+                        "secondary-container": "#43474b",
+                        "on-primary-fixed": "#00210c",
+                        "on-secondary-container": "#b2b5ba",
+                        "surface-container-low": "#161d17",
+                        "inverse-surface": "#dde5da",
+                        "glass-surface": "rgba(15, 23, 42, 0.45)",
+                        "canvas-base": "#090d10",
+                        "on-tertiary-container": "#794418",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed": "#301400",
+                        "outline-variant": "#3d4a3e",
+                        "on-primary-fixed-variant": "#005227",
+                        "tertiary": "#ffd9c1",
+                        "inverse-primary": "#006d36",
+                        "secondary": "#c4c7cb",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#6c3a0f",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#ffb47f",
+                        "on-error": "#690005",
+                        "primary-fixed": "#6dfe9c",
+                        "primary-fixed-dim": "#4de082",
+                        "on-surface": "#dde5da",
+                        "surface-container-highest": "#2f372f",
+                        "on-secondary-fixed-variant": "#43474b",
+                        "surface-container-lowest": "#09100a",
+                        "secondary-fixed-dim": "#c4c7cb",
+                        "tertiary-fixed": "#ffdcc6",
+                        "background": "#0e150f",
+                        "on-background": "#dde5da",
+                        "active-glow": "rgba(74, 222, 128, 0.15)",
+                        "whisper-border": "rgba(255, 255, 255, 0.08)",
+                        "surface-bright": "#333b34",
+                        "text-primary": "#f8fafc",
+                        "tertiary-fixed-dim": "#ffb784",
+                        "primary-container": "#4ade80",
+                        "surface-dim": "#0e150f",
+                        "surface": "#0e150f",
+                        "on-surface-variant": "#bccabb",
+                        "on-secondary": "#2d3134",
+                        "surface-container": "#1a211b",
+                        "text-secondary": "#94a3b8",
+                        "on-primary": "#003919",
+                        "on-secondary-fixed": "#181c1f",
+                        "primary": "#6bfb9a",
+                        "on-tertiary": "#4f2500",
+                        "outline": "#869486",
+                        "inverse-on-surface": "#2b322b",
+                        "surface-variant": "#2f372f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "2rem",
+                        "container-todo": "400px",
+                        "container-music": "360px",
+                        "inner-padding": "1.5rem",
+                        "fab-size": "48px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Outfit"],
+                        "display-timer": ["JetBrains Mono"],
+                        "h1": ["Outfit"],
+                        "mono-label": ["JetBrains Mono"],
+                        "label-sm": ["Outfit"],
+                        "display-timer-mobile": ["JetBrains Mono"],
+                        "body-lg": ["Outfit"],
+                        "body-md": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "display-timer": ["80px", { "lineHeight": "1", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "h1": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "mono-label": ["12px", { "lineHeight": "1", "fontWeight": "400" }],
+                        "label-sm": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-timer-mobile": ["48px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-canvas-base text-text-primary min-h-screen relative overflow-hidden flex flex-col font-body-md">
+<!-- Background Image -->
+<div class="absolute inset-0 w-full h-full bg-cover bg-center -z-10" data-alt="A highly atmospheric, moody forest scene during a heavy downpour, viewed through a rain-streaked glass window. The dark, misty evergreen trees fade into the foggy distance, creating a sense of infinite depth. The lighting is dark and cinematic, with a solitary, warm, glowing oil lamp illuminating the foreground, casting soft amber light. The aesthetic is extremely minimalist, calm, and slightly melancholic, perfect for deep focus and meditation." style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLtk7JyIKn0jarZVchY_jsopYEOD3rNWobD2WTdmrKSAy26ql5_YkvXJOkxo4mHg5le-hOG5LOnuBptGp7ryUFKyVEcen_VgTg90TU3XEIjtzD07Yqdgdbpe-_FQq5R5JDAn6WGR7yYOwYCzVyYofsHkSl4Ighy_m3OiNwWrAO2aIMj24IMDNSVBgVoKo6PKqK9w4EXUOfUs3zt86gArfI5G4Eyk047IJj69ES3PUpHW0yd2yFoGNPEwOQ')">
+</div>
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-transparent flex justify-between items-center w-full px-inner-padding py-4 shadow-none backdrop-blur-2xl saturate-180 bg-glass-surface z-40 md:flex hidden">
+<div class="font-h2 text-h2 font-black text-primary tracking-tight">VibeSpace</div>
+<nav class="flex gap-6 items-center">
+<button aria-label="Settings" class="text-on-surface-variant hover:text-primary transition-colors active:translate-y-[1px] duration-200 focus:outline-none">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button aria-label="Account" class="text-on-surface-variant hover:text-primary transition-colors active:translate-y-[1px] duration-200 focus:outline-none">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</nav>
+</header>
+<!-- Main Content Area (Centered) -->
+<main class="flex-1 flex items-center justify-center relative z-10 w-full px-4 h-full pt-20 pb-24 md:py-0">
+<!-- Background Switcher Panel -->
+<section class="w-full max-w-[360px] bg-glass-surface backdrop-blur-[24px] saturate-[180%] border border-whisper-border rounded-[20px] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.1)]">
+<div class="p-6 flex flex-col gap-6">
+<!-- Header -->
+<div class="flex justify-between items-center">
+<h2 class="font-h2 text-h2 text-slate-50 font-bold tracking-tight">Customize Vibe</h2>
+<button aria-label="Close panel" class="text-text-secondary hover:text-text-primary transition-colors focus:outline-none active:translate-y-[1px]">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Section 1: Curated Backgrounds -->
+<div class="flex flex-col gap-3">
+<h3 class="font-label-sm text-label-sm text-slate-400 uppercase tracking-wider">Curated Scenes</h3>
+<div class="grid grid-cols-2 gap-3">
+<!-- Active Item: Misty Forest -->
+<button class="group relative rounded-lg overflow-hidden aspect-[4/3] border-2 border-primary-container focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-glass-surface active:scale-95 transition-all duration-200">
+<img class="w-full h-full object-cover" data-alt="A minimalist digital painting of a misty evergreen forest. The scene is shrouded in dense, cool grey fog, with silhouettes of tall pine trees receding into the background. The mood is highly meditative, calm, and atmospheric, utilizing a muted palette of dark greens, cool grays, and soft blues. The visual style is smooth, almost vectorized, prioritizing empty space and tranquility over hyper-realism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyBvKxo8d3r77hyUUP5UX4V0oBAgSUk_WlDZMmvah3CJ9LArCQYdD5ZIM3tECaIUEJqMuLGj6Ao-l1kHwEKl0raKfU1Pyf48HWGXfP4Q_vCoc3HCZ9xtq3O-IDdr3SKUD2Oyj_AvJnjcn_lUiyOZLyEdDREP59s72hZhMBUae1MjLN3erBN_hTvvg4R-WdsWShdSqG9d8gwJTYAsO5elHN4N66UmiZi1QGDPWuW0x3jGCv51WoGGgM1iEkv5NzdjcOtso5QfEWDdg"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="absolute bottom-2 left-2 right-2 text-left">
+<span class="font-mono-label text-mono-label text-white text-shadow-sm font-medium">Misty Forest</span>
+</div>
+</button>
+<!-- Standard Item: Ocean Waves -->
+<button class="group relative rounded-lg overflow-hidden aspect-[4/3] border border-whisper-border hover:border-text-secondary focus:outline-none focus:border-text-primary active:scale-95 transition-all duration-200">
+<img class="w-full h-full object-cover" data-alt="A serene, minimalist top-down view of gentle ocean waves washing onto a dark, smooth sandy beach. The water is a deep, moody teal color, contrasting with the stark white foam of the gentle surf. The lighting is soft and diffused, creating a calm, meditative atmosphere. The aesthetic is clean, modern, and uncluttered, perfect for a relaxing background visual." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnGGEw9q725Fl7q9RVr9P9Jpu83Rm63AV0q4mgys-FcrAH4BfSUHIxIM2VHNZVsgieulHY64dHFg5TkZjs4crz2vTmHiryCIVAIuu8Ry_2DzhZUie1d43kNOSp4OiDb-TTRzB9IBgWRPEULxzV1oV7yUeeRtmoazJYyEtaKo5g_dzhLKMN19wbNTnUNiCR39r6cfcJOMVyuPaR3gq6ljunLBtYDiN8MdEgF2e9-pgqi1r2EmpTpXBt_hDrRrEvd_J-l7gKaTP6m94"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300"></div>
+<div class="absolute bottom-2 left-2 right-2 text-left">
+<span class="font-mono-label text-mono-label text-slate-300 group-hover:text-white transition-colors">Ocean Waves</span>
+</div>
+</button>
+<!-- Standard Item: Quiet Room -->
+<button class="group relative rounded-lg overflow-hidden aspect-[4/3] border border-whisper-border hover:border-text-secondary focus:outline-none focus:border-text-primary active:scale-95 transition-all duration-200">
+<img class="w-full h-full object-cover" data-alt="A minimalist, dimly lit study room interior at dusk. The scene features a sleek, dark wood desk with a solitary glowing desk lamp casting a warm circle of light. A large window reveals a deep blue, twilight sky outside. The walls are a dark, muted slate gray. The atmosphere is deeply focused, quiet, and cozy, utilizing soft shadows and high-end minimalist design aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7gl3lcoc9jK4ENCAZPJ03UI21hi9n5Jh--Z8ffi1eXU0a089T_DeniOM9N2udZ_XdpDlztjmv5Yn9oaC1x2B4vt6hGhj6_g6p-epO6JLKPBOiFyJHW6NBG59ToA6yUqjQXZZPW1jSmssN900D4BFJEffNOl2QHwRGhgn9mGaCHRZ6X3JRyu9ROcj2Ant_ggzeQJIxnpQkcGeuWV3N7IXiZ2sz3-Vg8c8-u9RbzbFHeU8Xb1_vJNfk8FYp-Fz70ctGJFd5fdD_Z3o"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300"></div>
+<div class="absolute bottom-2 left-2 right-2 text-left">
+<span class="font-mono-label text-mono-label text-slate-300 group-hover:text-white transition-colors">Quiet Room</span>
+</div>
+</button>
+<!-- Standard Item: Cozy Cabin -->
+<button class="group relative rounded-lg overflow-hidden aspect-[4/3] border border-whisper-border hover:border-text-secondary focus:outline-none focus:border-text-primary active:scale-95 transition-all duration-200">
+<img class="w-full h-full object-cover" data-alt="A warm, inviting interior view of a rustic yet modern log cabin during a snowstorm. A modern, minimalist wood-burning stove casts a bright orange, flickering glow on the dark wood paneled walls. Outside the large glass window, heavy snow falls against a dark, moody winter forest backdrop. The mood is extremely cozy, safe, and sheltered, using a stark contrast between the warm interior light and the cold exterior." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAGXM6xfC8K6trMJtmwC5kne-kQOBjgdkBSueHHPbDgxXJmB3BQ2nkrUCu-DRWCoHZbCLbtzmcAnydawqyyx9nXnGjKTIy30Q8kSr7vv-lu2E3mNhQVCFNg7EEeN6O1Koa0_RsXzXLiGErh2Qk_q5519m4i29J6bfWihviwXZFKCGY5Hi73ZxM_v28x-8jna8rLnl6g_H1QdXHS71zLk3OrHqpxfImfO-VLEjrB8cVaPUFveJEVjttJ-H6GxLljlnjgO_00-lqIKI"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300"></div>
+<div class="absolute bottom-2 left-2 right-2 text-left">
+<span class="font-mono-label text-mono-label text-slate-300 group-hover:text-white transition-colors">Cozy Cabin</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Section 2: Custom URL -->
+<div class="flex flex-col gap-3">
+<h3 class="font-label-sm text-label-sm text-slate-400 uppercase tracking-wider">Custom Background</h3>
+<div class="flex flex-col gap-2">
+<input class="w-full bg-[rgba(0,0,0,0.3)] border border-whisper-border rounded-lg px-4 py-3 font-body-md text-text-primary placeholder:text-slate-400 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors shadow-inner" placeholder="Paste custom image URL..." type="text"/>
+<button class="w-full bg-primary-container hover:bg-[#3bcf70] text-[#090d10] font-bold py-3 px-4 rounded-lg active:translate-y-[1px] transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-glass-surface">
+                            Apply
+                        </button>
+</div>
+</div>
+<!-- Section 3: Settings -->
+<div class="flex flex-col gap-3 border-t border-whisper-border pt-4">
+<div class="flex justify-between items-center">
+<h3 class="font-label-sm text-label-sm text-slate-400 uppercase tracking-wider">Card Opacity</h3>
+<span class="font-mono-label text-mono-label text-text-secondary">45%</span>
+</div>
+<div class="w-full py-2">
+<input class="w-full h-1 bg-white/10 rounded-full appearance-none outline-none focus:ring-2 focus:ring-primary-container/50" max="100" min="10" type="range" value="45"/>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-center items-center gap-8 px-inner-padding pb-6 pt-4 bg-transparent backdrop-blur-2xl saturate-180 bg-glass-surface border-t border-whisper-border shadow-[0_-8px_32px_0_rgba(0,0,0,0.3)] rounded-t-xl md:hidden">
+<button aria-label="Timer" class="flex flex-col items-center justify-center text-on-surface-variant px-6 py-2 hover:text-primary transition-all active:scale-95 duration-200 ease-[cubic-bezier(0.175,0.885,0.32,1.1)]">
+<span class="material-symbols-outlined mb-1" data-icon="timer">timer</span>
+<span class="font-label-sm text-label-sm">Timer</span>
+</button>
+<button aria-label="Music" class="flex flex-col items-center justify-center text-on-surface-variant px-6 py-2 hover:text-primary transition-all active:scale-95 duration-200 ease-[cubic-bezier(0.175,0.885,0.32,1.1)]">
+<span class="material-symbols-outlined mb-1" data-icon="music_note">music_note</span>
+<span class="font-label-sm text-label-sm">Music</span>
+</button>
+<button aria-label="Sounds" class="flex flex-col items-center justify-center text-primary bg-active-glow rounded-xl px-6 py-2 active:scale-95 transition-all duration-200 ease-[cubic-bezier(0.175,0.885,0.32,1.1)]">
+<span class="material-symbols-outlined mb-1" data-icon="filter_drama">filter_drama</span>
+<span class="font-label-sm text-label-sm">Sounds</span>
+</button>
+<button aria-label="Tasks" class="flex flex-col items-center justify-center text-on-surface-variant px-6 py-2 hover:text-primary transition-all active:scale-95 duration-200 ease-[cubic-bezier(0.175,0.885,0.32,1.1)]">
+<span class="material-symbols-outlined mb-1" data-icon="check_circle">check_circle</span>
+<span class="font-label-sm text-label-sm">Tasks</span>
+</button>
+</nav>
+<script>
+        // Simple script to update range slider background if needed for more complex styling,
+        // though basic styling is handled in the CSS above for minimalism.
+        const opacitySlider = document.querySelector('input[type="range"]');
+        const opacityValue = opacitySlider.parentElement.previousElementSibling.querySelector('span');
+
+        opacitySlider.addEventListener('input', (e) => {
+            opacityValue.textContent = `${e.target.value}%`;
+            // In a real app, this would update the CSS variable or inline style of the card's background
+        });
+    </script>
+</body></html>

@@ -1,25 +1,33 @@
-/* VibeSpace Core Design System Styles */
+/* VibeSpace Core Design System - Aligned with Stitch */
 
 :root {
-  /* Color Palette - Zen Glassmorphism */
+  /* Design Tokens from Stitch tailwind-config */
   --color-canvas-base: #090d10;
   --color-glass-surface: rgba(15, 23, 42, 0.45);
-  --color-glow-accent: #4ade80; /* Mint Green */
-  --color-text-primary: #f8fafc; /* Slate 50 */
-  --color-text-secondary: #94a3b8; /* Slate 400 */
   --color-whisper-border: rgba(255, 255, 255, 0.08);
-  --shadow-active-glow: 0 0 12px rgba(74, 222, 128, 0.25);
-  
-  /* Typography */
-  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  
-  /* Motion & Animations */
+  --color-primary: #6bfb9a; /* Bright Mint Green */
+  --color-primary-fixed: #6dfe9c;
+  --color-primary-fixed-dim: #4de082;
+  --color-text-primary: #f8fafc; /* Slate-50 */
+  --color-text-secondary: #94a3b8; /* Slate-400 */
+  --color-active-glow: rgba(74, 222, 128, 0.15);
+  --shadow-active-glow: 0 0 20px rgba(74, 222, 128, 0.3);
+
+  /* Spacing Constraints */
+  --container-music-w: 360px;
+  --container-todo-w: 400px;
+  --fab-size: 48px;
+
+  /* Fonts */
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Motion */
   --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   --transition-smooth: all 0.3s ease;
 }
 
-/* Global Reset & Body Setup */
+/* Global Reset */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -43,323 +51,716 @@ body, html {
   height: 100%;
 }
 
-/* Base App Layout */
+/* Main Workspace layout mapping of Screen 1 */
 .workspace-container {
   position: relative;
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-canvas-base);
   overflow: hidden;
 }
 
-/* Background overlay (for background switching/loading) */
-.background-overlay {
+/* Background image & overlay layering */
+.workspace-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+  z-index: 0;
+  transition: background-image 0.8s ease-in-out;
+}
+
+.workspace-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.5s ease;
+}
+
+/* Top Navigation Bar exactly matching Stitch mockups */
+.top-nav {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: background-image 0.8s ease-in-out, opacity 0.5s ease;
-  z-index: 0;
-  /* fallback static ambient background styling */
-  background-image: radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8), var(--color-canvas-base));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 72px;
+  padding: 0 32px;
+  max-width: 1280px;
+  margin: 0 auto;
+  z-index: 40;
+  backdrop-blur: 24px;
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--color-whisper-border);
+  background: rgba(9, 13, 16, 0.35);
+  box-shadow: 0 8px 32px 0 rgba(22, 56, 40, 0.05);
 }
 
-.main-content {
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.03em;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-icon-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.nav-icon-btn:hover {
+  color: var(--color-text-primary);
+  opacity: 0.8;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--color-whisper-border);
+  object-cover: cover;
+}
+
+/* Main Workspace layout */
+.main-workspace {
   position: relative;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
+  z-index: 10;
+  padding-top: 80px;
+  padding-bottom: 110px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
-/* Typography styles */
-h1, h2, h3, h4 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-}
-
-h3 {
-  font-size: 1.25rem;
-  margin-bottom: 4px;
-  color: var(--color-text-primary);
-}
-
-.subtitle {
-  font-size: 0.875rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 16px;
-}
-
-/* Glassmorphism Panel Component */
+/* Glassmorphism Panel base style */
 .glass-panel {
-  background: var(--color-glass-surface);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
+  background-color: var(--color-glass-surface);
   border: 1px solid var(--color-whisper-border);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
   transition: var(--transition-spring);
 }
 
-/* Floating widgets configuration (responsive position) */
-.floating-widget {
-  position: absolute;
-  bottom: 96px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 380px;
-  padding: 24px;
-  z-index: 10;
-  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 20px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-
-/* Interactive Elements: Glass Buttons */
-.glass-button {
-  display: inline-flex;
+/* Pomodoro Timer Center Widget styling */
+.pomodoro-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 20;
+}
+
+.timer-tabs {
+  display: flex;
   gap: 8px;
-  padding: 10px 20px;
+  margin-bottom: 32px;
   border-radius: 9999px;
+  padding: 4px;
+}
+
+.timer-tab-btn {
+  padding: 8px 24px;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
   font-family: var(--font-display);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--color-text-primary);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  outline: none;
-  transition: var(--transition-spring);
-  user-select: none;
+  transition: var(--transition-smooth);
 }
 
-.glass-button:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
-}
-
-.glass-button:active {
-  transform: translateY(1px);
-}
-
-.glass-button.primary {
-  background: var(--color-glow-accent);
-  color: var(--color-canvas-base);
-  font-weight: 600;
-  border-color: transparent;
-}
-
-.glass-button.primary:hover {
-  background: #3be873;
-  box-shadow: var(--shadow-active-glow);
-}
-
-/* Interactive Elements: Glass Inputs */
-.glass-input {
-  width: 100%;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--color-whisper-border);
+.timer-tab-btn:hover {
   color: var(--color-text-primary);
-  outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.glass-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+.timer-tab-btn.active {
+  background-color: rgba(107, 251, 154, 0.2);
+  color: var(--color-primary);
 }
 
-.glass-input:focus {
-  border-color: var(--color-glow-accent);
-  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.15);
-}
-
-/* Zen Pomodoro Timer Component styling */
-.pomodoro-container {
+.timer-ring-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 32px;
-}
-
-.pomodoro-ring-outer {
-  width: 280px;
-  height: 280px;
+  justify-content: center;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 23, 42, 0.3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-  animation: breathing-slow 8s infinite ease-in-out;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  margin-bottom: 32px;
+  transition: var(--transition-spring);
 }
 
-.pomodoro-ring-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.progress-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
 }
 
-.timer-display {
+@keyframes pulse-ring {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.active-session .timer-ring-container {
+  animation: pulse-ring 4s infinite cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+.timer-ring {
+  stroke-dasharray: 880;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.25s linear;
+}
+
+.timer-digits-wrapper {
+  text-align: center;
+  z-index: 10;
+}
+
+.timer-digits {
   font-family: var(--font-mono);
-  font-size: 4.5rem;
+  font-size: 5rem;
   font-weight: 500;
   letter-spacing: -0.02em;
-  color: var(--color-text-primary);
+  color: var(--color-primary);
   line-height: 1;
+  text-shadow: 0 2px 10px rgba(107, 251, 154, 0.15);
 }
 
-.timer-status {
-  font-family: var(--font-display);
-  font-size: 0.85rem;
+.timer-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--color-glow-accent);
-  margin-top: 12px;
-  font-weight: 600;
+  margin-top: 8px;
 }
 
-.timer-controls {
+.timer-control-row {
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 24px;
 }
 
-/* Breathing animation for Pomodoro Clock */
-@keyframes breathing-slow {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.05);
-  }
-  50% {
-    transform: scale(1.02);
-    box-shadow: 0 12px 40px 0 rgba(74, 222, 128, 0.08);
-    border-color: rgba(74, 222, 128, 0.15);
-  }
-}
-
-/* Floating Action Control Bar (FABs container) */
-.footer-controls {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 12px;
-  background: rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: 8px 16px;
-  border-radius: 9999px;
-  border: 1px solid var(--color-whisper-border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
-  z-index: 100;
-}
-
-.fab-button {
+.timer-btn-round {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
   color: var(--color-text-secondary);
   cursor: pointer;
-  outline: none;
+  border: none;
   transition: var(--transition-spring);
-  user-select: none;
 }
 
-.fab-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+.timer-btn-round:hover {
   color: var(--color-text-primary);
-  transform: translateY(-2px);
+  transform: scale(1.05);
 }
 
-.fab-button:active {
-  transform: translateY(0);
-}
-
-.fab-button.active {
-  background: var(--color-glow-accent);
+.timer-btn-primary {
+  padding: 16px 32px;
+  border-radius: 9999px;
+  border: none;
+  background-color: var(--color-primary);
   color: var(--color-canvas-base);
-  border-color: transparent;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 700;
   box-shadow: var(--shadow-active-glow);
-}
-
-/* Mixer rows styling */
-.mixer-row {
-  margin: 14px 0;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+  transition: var(--transition-spring);
 }
 
-.volume-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 140px;
-  height: 4px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.1);
-  outline: none;
-  transition: background 0.3s;
+.timer-btn-primary:hover {
+  transform: scale(1.05);
 }
 
-.volume-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--color-text-secondary);
+.timer-btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* Floating panels positions */
+
+/* 1. Lofi Player (Bottom Left) */
+.music-widget {
+  position: absolute;
+  bottom: 128px;
+  left: 32px;
+  width: var(--container-music-w);
+  padding: 24px;
+  border-radius: 20px;
+  z-index: 30;
+}
+
+.music-widget:hover {
+  transform: scale(1.02);
+}
+
+.music-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.album-art-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-whisper-border);
+  flex-shrink: 0;
+}
+
+.album-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.music-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.music-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-channel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Animated visualizer bars */
+.visualizer-wave {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 16px;
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+@keyframes visualizer {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+
+.visualizer-bar {
+  width: 4px;
+  background-color: var(--color-primary);
+  border-radius: 2px 2px 0 0;
+  animation: visualizer 1s infinite ease-in-out;
+}
+
+.visualizer-bar:nth-child(2) { animation-delay: 0.2s; }
+.visualizer-bar:nth-child(3) { animation-delay: 0.4s; }
+.visualizer-bar:nth-child(4) { animation-delay: 0.1s; }
+
+.volume-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.music-streams-scroller {
+  max-height: 180px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stream-select-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--color-text-primary);
+  text-align: left;
   cursor: pointer;
   transition: var(--transition-smooth);
 }
 
-.volume-slider:hover::-webkit-slider-thumb {
-  background: var(--color-glow-accent);
-  transform: scale(1.2);
-  box-shadow: 0 0 6px rgba(74, 222, 128, 0.4);
+.stream-select-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-whisper-border);
 }
 
-/* Custom Web Scrollbar implementation following guidance */
+.stream-select-btn.active {
+  background: rgba(107, 251, 154, 0.08);
+  border-color: rgba(107, 251, 154, 0.2);
+}
+
+.stream-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.stream-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stream-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stream-author {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+/* 2. Sound Mixer (Right Center) */
+.mixer-widget {
+  position: absolute;
+  top: 50%;
+  right: 32px;
+  transform: translateY(-50%);
+  width: 400px;
+  padding: 24px;
+  border-radius: 20px;
+  z-index: 30;
+}
+
+.widget-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.widget-title-row h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.mixer-rows-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sound-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sound-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.sound-name {
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sound-percentage {
+  font-family: var(--font-mono);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+}
+
+/* Range input styling matching Stitch custom rules */
+input[type=range] {
+  -webkit-appearance: none;
+  background: transparent;
+  width: 100%;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: var(--color-whisper-border);
+  border-radius: 2px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  cursor: pointer;
+  margin-top: -6px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+input[type=range]:hover::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+/* Custom classes for range sliders when active */
+input[type=range].slider-active::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+/* 3. Todo List (Top Right) */
+.todo-widget {
+  position: absolute;
+  top: 96px;
+  right: 32px;
+  width: var(--container-todo-w);
+  padding: 24px;
+  border-radius: 16px;
+  z-index: 30;
+}
+
+.todo-scroller {
+  max-height: 220px;
+  overflow-y: auto;
+  margin-top: 16px;
+}
+
+.todo-list-ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.todo-item-li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.todo-check-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  transition: color 0.2s;
+}
+
+.todo-check-btn.checked {
+  color: var(--color-primary);
+}
+
+.todo-check-btn.unchecked {
+  color: var(--color-whisper-border);
+}
+
+.todo-check-btn.unchecked:hover {
+  color: rgba(107, 251, 154, 0.5);
+}
+
+.todo-item-text {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.todo-item-text.completed {
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+}
+
+.todo-item-text.active {
+  color: var(--color-text-primary);
+}
+
+/* Delete button for Todo */
+.todo-delete-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  margin-left: auto;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.todo-item-li:hover .todo-delete-btn {
+  opacity: 1;
+}
+
+.todo-delete-btn:hover {
+  color: #ffb4ab;
+}
+
+.todo-progress-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-whisper-border);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+/* 4. Background Switcher Panel (Vibe) */
+.background-widget {
+  position: absolute;
+  bottom: 128px;
+  right: 32px;
+  width: 360px;
+  padding: 24px;
+  border-radius: 20px;
+  z-index: 30;
+}
+
+.preset-thumb-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--color-whisper-border);
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: var(--transition-spring);
+}
+
+.preset-thumb-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.preset-thumb-btn.active {
+  border-color: var(--color-primary);
+  background: rgba(107, 251, 154, 0.05);
+}
+
+.preset-thumb-img {
+  width: 100%;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.preset-thumb-name {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+/* Bottom Docking Navbar */
+.dock-nav {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-radius: 9999px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.dock-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: var(--transition-spring);
+}
+
+.dock-btn:hover {
+  color: var(--color-text-primary);
+  transform: scale(1.1);
+}
+
+.dock-btn:active {
+  transform: scale(0.95);
+}
+
+.dock-btn.active {
+  background-color: rgba(107, 251, 154, 0.2);
+  color: var(--color-primary);
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
+}
+
+/* Custom Scrollbar */
 .scroller {
-  --scrollbar-thumb: rgba(255, 255, 255, 0.15);
-  --scrollbar-track: rgba(0, 0, 0, 0.2);
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   scrollbar-width: thin;
+}
+
+.scroller {
+  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
+  --scrollbar-track: rgba(0, 0, 0, 0.15);
 }
 
 @supports not (scrollbar-color: auto) {
@@ -377,48 +778,232 @@ h3 {
   }
 }
 
-/* Preset grid layouts */
-.preset-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
+/* Responsive / Mobile Styling adaptation */
+@media (max-width: 1024px) {
+  /* Hide absolute sidebar placements on smaller screens */
+  .music-widget, .mixer-widget, .todo-widget, .background-widget {
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    border-bottom: none !important;
+    animation: slideUpMobile 0.4s cubic-bezier(0.175, 0.885, 0.32, 1) forwards !important;
+  }
 
-.preset-grid .glass-button {
-  padding: 8px 12px;
-  font-size: 0.85rem;
-}
+  .top-nav {
+    padding: 0 16px;
+  }
 
-/* Responsive layout adjustments */
-@media (max-width: 768px) {
-  .timer-display {
+  .timer-digits {
     font-size: 3.5rem;
   }
-  .pomodoro-ring-outer {
+
+  .timer-ring-container {
     width: 220px;
     height: 220px;
   }
-  .floating-widget {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transform: none;
-    width: 100%;
-    max-width: 100%;
-    border-radius: 24px 24px 0 0;
-    border-bottom: none;
-    animation: slideUpMobile 0.4s cubic-bezier(0.175, 0.885, 0.32, 1) forwards;
+
+  .main-workspace {
+    padding-top: 72px;
+    padding-bottom: 120px;
   }
+
   @keyframes slideUpMobile {
-    from {
-      transform: translateY(100%);
-    }
-    to {
-      transform: translateY(0);
-    }
-  }
-  .footer-controls {
-    bottom: 16px;
-    padding: 6px 12px;
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
   }
 }
+
+/* 5. Stitch-Specific Aligned UI Helpers */
+
+.preset-grid-stitch {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.preset-thumb-btn-stitch {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: none;
+  border: 1px solid var(--color-whisper-border);
+  cursor: pointer;
+  transition: var(--transition-spring);
+  padding: 0;
+}
+
+.preset-thumb-btn-stitch:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.preset-thumb-btn-stitch.active {
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
+}
+
+.preset-thumb-img-stitch {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preset-overlay-stitch {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.1) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 12px 10px;
+  text-align: left;
+}
+
+.preset-name-stitch {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.preset-checkmark-stitch {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 5;
+  background: var(--color-canvas-base);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+.stream-select-btn-stitch {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.stream-select-btn-stitch:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-whisper-border);
+}
+
+.stream-select-btn-stitch.active {
+  background: rgba(107, 251, 154, 0.08);
+  border-color: rgba(107, 251, 154, 0.2);
+}
+
+/* Styled Toggle Switches */
+.switch-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.switch-toggle.sm {
+  width: 36px;
+  height: 20px;
+}
+
+.switch-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-whisper-border);
+  transition: 0.3s;
+  border-radius: 34px;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--color-text-secondary);
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.switch-toggle.sm .switch-slider:before {
+  height: 12px;
+  width: 12px;
+  left: 3px;
+  bottom: 3px;
+}
+
+.switch-toggle input:checked + .switch-slider {
+  background-color: rgba(107, 251, 154, 0.2);
+  border-color: var(--color-primary);
+}
+
+.switch-toggle input:checked + .switch-slider:before {
+  background-color: var(--color-primary);
+  transform: translateX(18px);
+}
+
+.switch-toggle.sm input:checked + .switch-slider:before {
+  transform: translateX(14px);
+}
+
+/* Range input styling matching custom slider fill */
+input[type=range].custom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+input[type=range].custom-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: transparent;
+}
+
+input[type=range].custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  cursor: pointer;
+  margin-top: -6px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+input[type=range].custom-slider:hover::-webkit-slider-thumb {
+  opacity: 1;
+}
+

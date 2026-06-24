@@ -12,7 +12,7 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 - [x] Tạo tài liệu Product Requirements Document ([PRD.md](file:///Users/tanthanh/Documents/Project/vibe-space/docs/PRD.md)).
 - [x] Định nghĩa kiến trúc kỹ thuật ([TECH_ARCHITECTURE.md](file:///Users/tanthanh/Documents/Project/vibe-space/docs/TECH_ARCHITECTURE.md)).
 - [x] Thiết lập kế hoạch dự án ([PLAN.md](file:///Users/tanthanh/Documents/Project/vibe-space/docs/PLAN.md)).
-- [ ] Thống nhất với User về các lựa chọn và yêu cầu chính (thông qua session `/grill-me` hiện tại).
+- [x] Thống nhất với User về các lựa chọn và yêu cầu chính (thông qua session `/grill-me` hiện tại).
 
 ### Milestone 2: Design Phase (Thiết kế trên Google Stitch)
 - [x] Tạo một Stitch project mới: `VibeSpace` (ID: `5942734363798515577`).
@@ -33,17 +33,33 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 - [x] Triển khai các CSS căn bản trong `index.css` (định nghĩa các CSS variables cho ảnh nền, tỷ lệ font chữ, hiệu ứng mờ kính glassmorphic panel và layout cho trạng thái focus).
 - [x] Cài đặt các package cơ bản (ví dụ: `lucide-react` làm thư viện icon chính).
 
-### Milestone 4: Widget Implementation (Hiện thực hóa các Widget - Coding)
-- [ ] **Background Switcher Module:** Lập danh sách các ảnh phong cảnh mặc định, xử lý logic chọn ảnh, nhập URL tùy chỉnh và đồng bộ hóa với localStorage.
-- [ ] **Pomodoro Timer Module:** Viết custom hook timer chính xác (có cơ chế hiệu chỉnh sai số khi tab chạy ẩn), cho phép cấu hình thời gian linh hoạt, phát chime khi hoàn thành chu kỳ, và vẽ vòng tròn countdown SVG đồng tâm.
-- [ ] **YouTube Lofi Player Module:** Xử lý việc load async script YouTube iframe player, quản lý trạng thái play/pause, volume control, và input dán link nhạc.
-- [ ] **White Noise Mixer Module:** Điều khiển phát đa kênh các file âm thanh HTML5 loop từ các CDN với thanh trượt chỉnh volume độc lập cho từng kênh.
-- [ ] **Daily Todo List Module:** Quản lý CRUD các tác vụ hàng ngày, đi kèm logic tự động dọn dẹp và reset danh sách dựa vào việc so sánh ngày hiện tại với timestamp cũ.
+### Milestone 4: Widget Implementation & Design Alignment (Hiện thực hóa & Đồng bộ thiết kế)
+
+#### Phase 1: Convert Stitch Design to Code (Chuyển đổi thiết kế Google Stitch thành mã nguồn)
+- [x] Tải xuống các tài nguyên thiết kế từ Google Stitch bao gồm các màn hình HTML và tệp mockups PNG lưu trữ trong thư mục `.stitch/designs/` để phân tích trực quan.
+- [x] Phân tích cấu trúc giao diện HTML tĩnh và hệ thống tokens màu sắc, kiểu dáng (glassmorphism, layout) từ Google Stitch.
+- [x] Chuyển đổi cấu trúc HTML tĩnh thành các React Component TypeScript tương ứng.
+- [x] Thiết lập hệ thống style tokens và các class dùng chung (preset-grid-stitch, preset-thumb-btn-stitch...) bằng Vanilla CSS trong `index.css` để bảo đảm độ chính xác giao diện 100%.
+- [x] Đồng nhất hoàn toàn giao diện của các component với Google Stitch:
+  - **Background Switcher Panel:** Căn chỉnh lưới ảnh preset, thiết kế vùng nhập URL tùy biến xếp dọc linh hoạt, vẽ các lớp phủ mờ tối trên ảnh và căn giữa chính xác icon checkmark khi ảnh được chọn.
+  - **Lofi Music Panel:** Thiết kế lại cụm nút điều khiển phát nhạc (Play/Pause, Skip), bỏ slider volume trùng lặp, thêm danh sách kênh kèm dấu tròn trạng thái hoạt động động, và dựng thanh visualizer hoạt cảnh 3 cột sóng động.
+  - **Ambient Mixer Panel:** Định hình kích thước chuẩn 400px với viền bo tròn 20px, tối ưu hóa thanh trượt âm lượng với dải màu gradient đầy thanh, cấu hình nút Master Mute dạng toggle switch lớn, và map các biểu tượng Lucide tương thích từng sound track.
+  - **Todo List Panel & Pomodoro Widget:** Đồng bộ hóa form input, button, biểu đồ SVG vòng tròn đếm ngược với phong cách Glassmorphism Zen của Google Stitch.
+- [x] Khắc phục các lỗi về vỡ bố cục trên Mobile/Tablet bằng cách chuyển đổi Responsive Layout (sử dụng Drawer ở Mobile và Absolute Position ở Desktop).
+- [x] Giải quyết cảnh báo (warning) và lỗi phân tích SVG trong developer console do lỗi cú pháp gốc của icon `Leaf` (thay thế bằng icon `Sprout` từ `lucide-react`).
+
+#### Phase 2: Functionality & Third-Party Integration (Hiện thực hóa logic API và Tích hợp bên thứ ba)
+- [x] **Background Switcher Logic:** Cấu hình danh sách ảnh nền mặc định, thiết lập lưu ảnh được chọn/URL ảnh tùy biến vào `localStorage` để tự động khôi phục khi load lại trang.
+- [x] **Pomodoro Timer Precision Hooks:** Xây dựng hook đếm ngược chính xác cao vượt qua cơ chế background throttling của trình duyệt khi chạy ẩn tab, hỗ trợ cấu hình tùy biến thời gian các chu kỳ, phát âm thanh chime báo hiệu và nhấp nháy tab browser.
+- [x] **YouTube Lofi Player Integration:** Tải bất đồng bộ YouTube Iframe Player API, quản lý trạng thái đồng bộ âm lượng, play/pause, dán link nhạc YouTube tự chọn.
+- [x] **Ambient Sound Mixer Engine:** Nạp đa kênh và lặp vô hạn các tệp âm thanh HTML5 từ CDN công cộng, hỗ trợ điều chỉnh volume riêng biệt từng track và nút Master Mute nhanh.
+- [x] **Daily Todo List CRUD:** Xây dựng quản lý tác vụ (thêm, xóa, check hoàn thành), tính toán tiến trình % hoàn thành trực quan, và lập logic tự động xóa danh sách khi phát hiện chuyển sang ngày mới.
 
 ### Milestone 5: Integration & Polish (Tích hợp & Tối ưu)
-- [ ] Lắp ráp các widget riêng lẻ vào dashboard theo dạng grid linh hoạt, responsive tốt.
-- [ ] Tạo các hiệu ứng transition (fade-in, slide-out cho panel nổi khi đóng mở).
-- [ ] Test ứng dụng trên nhiều kích thước màn hình (Mobile, Tablet, Desktop viewports).
+- [x] Lắp ráp các widget riêng lẻ vào dashboard theo dạng grid linh hoạt, responsive tốt.
+- [x] Tạo các hiệu ứng transition (fade-in, slide-out cho panel nổi khi đóng mở).
+- [x] Test ứng dụng trên nhiều kích thước màn hình (Mobile, Tablet, Desktop viewports).
+- [x] Chạy thử nghiệm và khắc phục hoàn toàn lỗi hiển thị vỡ UI trên môi trường phát triển cục bộ (`http://localhost:5175/`).
 - [ ] Tối ưu hóa cuối cùng: kiểm tra nén file audio và thiết lập cơ chế lazy loading.
 
 ---
@@ -52,6 +68,9 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 
 | Task ID | Description (Mô tả công việc) | Estimated Effort (Ước lượng thời gian) |
 | :--- | :--- | :--- |
+| **STITCH-01** | Tải tài nguyên màn hình thiết kế (HTML/PNG) từ Google Stitch về dự án | 0.5 hr |
+| **STITCH-02** | Phân tích cấu trúc layout, màu sắc và CSS tokens từ thiết kế Google Stitch | 1 hr |
+| **STITCH-03** | Chuyển đổi cấu trúc HTML tĩnh sang các React TS components và style class CSS | 2.5 hrs |
 | **CODE-01** | Khởi tạo dự án Vite React TS và dọn dẹp các file boilerplate thừa | 1 hr |
 | **CODE-02** | Xây dựng baseline styling và định nghĩa CSS variables (Glassmorphism theme) | 1.5 hrs |
 | **CODE-03** | Phát triển Pomodoro widget (Precision timers & vẽ đường viền SVG tròn) | 2 hrs |
@@ -61,3 +80,4 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 | **CODE-07** | Tích hợp giao diện Dashboard, xử lý cơ chế floating panel trượt | 2 hrs |
 | **CODE-08** | Hiệu ứng phản hồi thị giác và tương tác nhỏ (hover effect, custom scrollbars) | 1.5 hrs |
 | **CODE-09** | Verification (Kiểm thử chức năng) & kiểm tra tương thích đa trình duyệt | 1 hr |
+| **FIX-01** | Đồng bộ giao diện 100% theo thiết kế Stitch và sửa lỗi console, vỡ layout | 3 hrs |
