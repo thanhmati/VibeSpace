@@ -15,12 +15,12 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 - [ ] Thống nhất với User về các lựa chọn và yêu cầu chính (thông qua session `/grill-me` hiện tại).
 
 ### Milestone 2: Design Phase (Thiết kế trên Google Stitch)
-- [ ] Tạo một Stitch project mới: `VibeSpace`.
-- [ ] Thiết lập file token cho Design System (`design_system.md`) chứa bảng màu (dark mode, các biến glassmorphic, typography, thông số styling cho các component).
-- [ ] Tạo các bản vẽ UI mockups và các biến thể (variants) cho màn hình VibeSpace trên Google Stitch:
-  - **Screen 1:** Focus Board (Dashboard chính với đồng hồ Pomodoro ở tâm diện tích, các floating widgets cho trình phát nhạc Lofi và Sound Mixer, ảnh nền rừng thông thơ mộng và widget danh sách todo thiết kế dạng glass).
-  - **Screen 2:** Collapsed Workspace Mode (Chế độ tối giản siêu sạch chỉ có Pomodoro timer và các nút cài đặt ẩn nhẹ nhàng).
-- [ ] Lấy feedback của user để cải tiến thiết kế trên Stitch.
+- [x] Tạo một Stitch project mới: `VibeSpace` (ID: `5942734363798515577`).
+- [x] Thiết lập file token cho Design System ([design_system.md](file:///Users/tanthanh/Documents/Project/vibe-space/docs/design_system.md)) chứa bảng màu (dark mode, các biến glassmorphic, typography, thông số styling cho các component) (Stitch Asset ID: `eb37f2ef7dd641d9b216d9cb69a640d4`).
+- [x] Tạo các bản vẽ UI mockups và các biến thể (variants) cho màn hình VibeSpace trên Google Stitch:
+  - **Screen 1:** Focus Board (Dashboard chính, ID: `0cae0fea5b914313bcb3742b95fc663c`).
+  - **Screen 2:** Collapsed Workspace Mode (Chế độ tối giản siêu sạch, ID: `8d8ae15942894609bceeb82e42c569bd`).
+- [x] Lấy feedback của user để cải tiến thiết kế trên Stitch (Đã chốt phong cách Glassmorphism Zen Focus).
 
 ### Milestone 3: Project Setup & Core Styles (Thiết lập dự án & CSS lõi)
 - [ ] Khởi tạo (scaffold) ứng dụng React sử dụng Vite và TypeScript.
