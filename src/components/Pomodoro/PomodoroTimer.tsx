@@ -5,6 +5,7 @@ import {
   type TimerSessionType,
 } from "../../context/WorkspaceContext";
 import { usePrecisionTimer } from "../../hooks/usePrecisionTimer";
+import chimeSound from "../../assets/audio/chime.mp3";
 
 const SESSION_TIMES: Record<TimerSessionType, number> = {
   focus: 1500, // 25 minutes
@@ -36,47 +37,21 @@ export const PomodoroTimer: React.FC = () => {
     };
   }, []);
 
-  // Synthesize a gentle, premium chime using Web Audio API (Offline-first, no CORS/Access Denied issues)
+  // Play the local chime sound 3 times sequentially
   const playGentleChime = () => {
     try {
-      const AudioContextClass =
-        window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContextClass) return;
-      const ctx = new AudioContextClass();
-      const now = ctx.currentTime;
-
-      const playTone = (
-        freq: number,
-        startTime: number,
-        duration: number,
-        volume: number,
-      ) => {
-        const osc = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(freq, startTime);
-
-        gainNode.gain.setValueAtTime(0, startTime);
-        gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.08);
-        gainNode.gain.exponentialRampToValueAtTime(
-          0.0001,
-          startTime + duration,
-        );
-
-        osc.connect(gainNode);
-        gainNode.connect(ctx.destination);
-
-        osc.start(startTime);
-        osc.stop(startTime + duration);
+      const playSingle = () => {
+        const audio = new Audio(chimeSound);
+        audio.volume = 0.5;
+        audio.play().catch((err) => {
+          console.warn("Chime playback failed:", err);
+        });
       };
 
-      // Play the chime 3 times with a 1.6-second interval
-      for (let i = 0; i < 3; i++) {
-        const offset = i * 1.6;
-        playTone(659.25, now + offset, 1.8, 0.15); // E5
-        playTone(987.77, now + offset + 0.12, 1.4, 0.1); // B5 (fifth)
-      }
+      // Play 3 times with 2-second interval
+      playSingle();
+      setTimeout(playSingle, 2000);
+      setTimeout(playSingle, 4000);
     } catch (err) {
       console.warn("Chime playback failed:", err);
     }
