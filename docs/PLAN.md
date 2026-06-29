@@ -50,7 +50,7 @@ Kế hoạch này phác thảo lộ trình (timeline), các cột mốc (milesto
 
 #### Phase 2: Functionality & Third-Party Integration (Hiện thực hóa logic API và Tích hợp bên thứ ba)
 - [x] **Background Switcher Logic:** Cấu hình danh sách ảnh nền mặc định, thiết lập lưu ảnh được chọn/URL ảnh tùy biến vào `localStorage` để tự động khôi phục khi load lại trang.
-- [x] **Pomodoro Timer Precision Hooks:** Xây dựng hook đếm ngược chính xác cao vượt qua cơ chế background throttling của trình duyệt khi chạy ẩn tab, hỗ trợ cấu hình tùy biến thời gian các chu kỳ, phát âm thanh chime báo hiệu và nhấp nháy tab browser.
+- [x] **Pomodoro Timer Precision Hooks:** Xây dựng hook đếm ngược chính xác cao vượt qua cơ chế background throttling của trình duyệt khi chạy ẩn tab, hỗ trợ cấu hình tùy biến thời gian các chu kỳ, phát âm thanh chime báo hiệu (sử dụng giải pháp tổng hợp tần số Web Audio API để tránh lỗi Access Denied và CORS từ link ngoài) và nhấp nháy tab browser.
 - [x] **YouTube Lofi Player Integration:** Tích hợp YouTube Iframe Player API bất đồng bộ, quản lý play/pause/skip, dán link tùy chỉnh.
   - **[FIX]** Error handling cho YouTube error codes (100/101/150), loading/unavailable state UI, auto-play khi đổi stream.
   - **[FIX]** Volume slider + mute toggle UI.

@@ -1,151 +1,184 @@
-import React, { useEffect, useRef } from 'react'
-import { Play, Pause, RotateCcw, SkipForward } from 'lucide-react'
-import { useWorkspace, type TimerSessionType } from '../../context/WorkspaceContext'
-import { usePrecisionTimer } from '../../hooks/usePrecisionTimer'
+import React, { useEffect, useRef } from "react";
+import { Play, Pause, RotateCcw, SkipForward } from "lucide-react";
+import {
+  useWorkspace,
+  type TimerSessionType,
+} from "../../context/WorkspaceContext";
+import { usePrecisionTimer } from "../../hooks/usePrecisionTimer";
 
 const SESSION_TIMES: Record<TimerSessionType, number> = {
   focus: 1500, // 25 minutes
-  short: 300,  // 5 minutes
-  long: 900    // 15 minutes
-}
+  short: 300, // 5 minutes
+  long: 900, // 15 minutes
+};
 
 const SESSION_LABELS: Record<TimerSessionType, string> = {
-  focus: 'Flow State',
-  short: 'Short Break',
-  long: 'Long Break'
-}
+  focus: "Flow State",
+  short: "Short Break",
+  long: "Long Break",
+};
 
 export const PomodoroTimer: React.FC = () => {
-  const { 
-    activeTimerSession, 
-    setActiveTimerSession, 
-    setIsTimerRunning 
-  } = useWorkspace()
+  const { activeTimerSession, setActiveTimerSession, setIsTimerRunning } =
+    useWorkspace();
 
-  const currentDuration = SESSION_TIMES[activeTimerSession]
-  
-  // Audio chime ref
-  const chimeRef = useRef<HTMLAudioElement | null>(null)
-  
+  const currentDuration = SESSION_TIMES[activeTimerSession];
+
   // Title flash interval ref
-  const titleIntervalRef = useRef<number | null>(null)
+  const titleIntervalRef = useRef<number | null>(null);
 
-  // Initialize chime audio
+  // Clean up title flash on unmount
   useEffect(() => {
-    chimeRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-84.wav')
-    chimeRef.current.preload = 'metadata'
-    
     return () => {
       if (titleIntervalRef.current) {
-        window.clearInterval(titleIntervalRef.current)
+        window.clearInterval(titleIntervalRef.current);
       }
+    };
+  }, []);
+
+  // Synthesize a gentle, premium chime using Web Audio API (Offline-first, no CORS/Access Denied issues)
+  const playGentleChime = () => {
+    try {
+      const AudioContextClass =
+        window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContextClass) return;
+      const ctx = new AudioContextClass();
+      const now = ctx.currentTime;
+
+      const playTone = (
+        freq: number,
+        startTime: number,
+        duration: number,
+        volume: number,
+      ) => {
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, startTime);
+
+        gainNode.gain.setValueAtTime(0, startTime);
+        gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.08);
+        gainNode.gain.exponentialRampToValueAtTime(
+          0.0001,
+          startTime + duration,
+        );
+
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+      };
+
+      // Play the chime 3 times with a 1.6-second interval
+      for (let i = 0; i < 3; i++) {
+        const offset = i * 1.6;
+        playTone(659.25, now + offset, 1.8, 0.15); // E5
+        playTone(987.77, now + offset + 0.12, 1.4, 0.1); // B5 (fifth)
+      }
+    } catch (err) {
+      console.warn("Chime playback failed:", err);
     }
-  }, [])
+  };
 
   const handleSessionComplete = () => {
     // Play chime sound
-    if (chimeRef.current) {
-      chimeRef.current.currentTime = 0
-      chimeRef.current.play().catch((err) => {
-        console.warn('Alarm audio play failed:', err)
-      })
-    }
+    playGentleChime();
 
     // Flash browser tab title
     if (titleIntervalRef.current) {
-      window.clearInterval(titleIntervalRef.current)
+      window.clearInterval(titleIntervalRef.current);
     }
 
-    let isAlert = true
-    document.title = "⏰ Time's Up!"
+    let isAlert = true;
+    document.title = "⏰ Time's Up!";
     titleIntervalRef.current = window.setInterval(() => {
-      document.title = isAlert ? 'VibeSpace - Zen Focus' : "⏰ Time's Up!"
-      isAlert = !isAlert
-    }, 1000)
+      document.title = isAlert ? "VibeSpace - Zen Focus" : "⏰ Time's Up!";
+      isAlert = !isAlert;
+    }, 1000);
 
     // Automatically stop running state in workspace
-    setIsTimerRunning(false)
-  }
+    setIsTimerRunning(false);
+  };
 
-  const {
-    timeLeft,
-    isRunning,
-    start,
-    pause,
-    reset
-  } = usePrecisionTimer({
+  const { timeLeft, isRunning, start, pause, reset } = usePrecisionTimer({
     initialDuration: currentDuration,
-    onComplete: handleSessionComplete
-  })
+    onComplete: handleSessionComplete,
+  });
 
   // Clear tab title flashing and sync status when user interacts/resets
   const clearTitleFlashing = () => {
     if (titleIntervalRef.current) {
-      window.clearInterval(titleIntervalRef.current)
-      titleIntervalRef.current = null
+      window.clearInterval(titleIntervalRef.current);
+      titleIntervalRef.current = null;
     }
-    document.title = 'VibeSpace - Zen Focus Space'
-  }
+    document.title = "VibeSpace - Zen Focus Space";
+  };
 
   // Handle active session changes from tabs
   const handleTabChange = (session: TimerSessionType) => {
-    clearTitleFlashing()
-    setActiveTimerSession(session)
-    setIsTimerRunning(false)
-    reset(SESSION_TIMES[session])
-  }
+    clearTitleFlashing();
+    setActiveTimerSession(session);
+    setIsTimerRunning(false);
+    reset(SESSION_TIMES[session]);
+  };
 
   const handleStartPause = () => {
-    clearTitleFlashing()
+    clearTitleFlashing();
     if (isRunning) {
-      pause()
-      setIsTimerRunning(false)
+      pause();
+      setIsTimerRunning(false);
     } else {
-      start()
-      setIsTimerRunning(true)
+      start();
+      setIsTimerRunning(true);
     }
-  }
+  };
 
   const handleResetClick = () => {
-    clearTitleFlashing()
-    reset(currentDuration)
-    setIsTimerRunning(false)
-  }
+    clearTitleFlashing();
+    reset(currentDuration);
+    setIsTimerRunning(false);
+  };
 
   const handleSkipClick = () => {
-    clearTitleFlashing()
+    clearTitleFlashing();
     // Cycle Focus -> Short Break -> Long Break -> Focus
-    let nextSession: TimerSessionType = 'focus'
-    if (activeTimerSession === 'focus') {
-      nextSession = 'short'
-    } else if (activeTimerSession === 'short') {
-      nextSession = 'long'
+    let nextSession: TimerSessionType = "focus";
+    if (activeTimerSession === "focus") {
+      nextSession = "short";
+    } else if (activeTimerSession === "short") {
+      nextSession = "long";
     }
-    handleTabChange(nextSession)
-  }
+    handleTabChange(nextSession);
+  };
 
   // Circular progress calculations (Radius = 140, Circumference = 880)
-  const circumference = 880
-  const progressRatio = timeLeft / currentDuration
-  const strokeDashoffset = circumference - progressRatio * circumference
+  const circumference = 880;
+  const progressRatio = timeLeft / currentDuration;
+  const strokeDashoffset = circumference - progressRatio * circumference;
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-  }
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
 
   return (
-    <div className={`pomodoro-wrapper ${isRunning ? 'active-session' : ''}`}>
+    <div className={`pomodoro-wrapper ${isRunning ? "active-session" : ""}`}>
       {/* Session Tabs */}
       <div className="timer-tabs glass-panel">
-        {(['focus', 'short', 'long'] as TimerSessionType[]).map((session) => (
+        {(["focus", "short", "long"] as TimerSessionType[]).map((session) => (
           <button
             key={session}
-            className={`timer-tab-btn ${activeTimerSession === session ? 'active' : ''}`}
+            className={`timer-tab-btn ${activeTimerSession === session ? "active" : ""}`}
             onClick={() => handleTabChange(session)}
           >
-            {session === 'focus' ? 'Focus' : session === 'short' ? 'Short Break' : 'Long Break'}
+            {session === "focus"
+              ? "Focus"
+              : session === "short"
+                ? "Short Break"
+                : "Long Break"}
           </button>
         ))}
       </div>
@@ -184,7 +217,11 @@ export const PomodoroTimer: React.FC = () => {
 
       {/* Controls */}
       <div className="timer-control-row">
-        <button className="timer-btn-round glass-panel" onClick={handleResetClick} title="Reset Timer">
+        <button
+          className="timer-btn-round glass-panel"
+          onClick={handleResetClick}
+          title="Reset Timer"
+        >
           <RotateCcw size={20} />
         </button>
         <button className="timer-btn-primary" onClick={handleStartPause}>
@@ -198,11 +235,15 @@ export const PomodoroTimer: React.FC = () => {
             </>
           )}
         </button>
-        <button className="timer-btn-round glass-panel" onClick={handleSkipClick} title="Skip Session">
+        <button
+          className="timer-btn-round glass-panel"
+          onClick={handleSkipClick}
+          title="Skip Session"
+        >
           <SkipForward size={20} />
         </button>
       </div>
     </div>
-  )
-}
-export default PomodoroTimer
+  );
+};
+export default PomodoroTimer;
